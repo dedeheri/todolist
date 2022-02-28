@@ -2,13 +2,14 @@ import React from "react";
 
 // icons
 import { NavLink } from "react-router-dom";
+import Add from "./Add";
 import Content from "./Content";
 
-function Main({ view, showMenu }) {
+function Main({ view, showMenu, setIsOpen, isOpen }) {
   const stateNoAcitive =
-    "text-lg whitespace-nowrap  text-gray-500 hover:bg-green-100 px-2 py-1 rounded-lg cursor-pointer transition duration-300 ";
+    "text-lg whitespace-nowrap  dark:text-white hover:bg-gray-100 hover:dark:bg-[#20262d] px-2 py-1 rounded-lg cursor-pointer transition duration-300 ";
   const stateAcitive =
-    "text-lg whitespace-nowrap  px-2 py-1 bg-green-100 rounded-lg cursor-pointer";
+    "text-lg whitespace-nowrap bg-gray-100 dark:bg-[#20262d] px-2 py-1 bg-gray-100 rounded-lg cursor-pointer";
 
   return (
     <div
@@ -74,6 +75,8 @@ function Main({ view, showMenu }) {
       </div>
 
       <Content view={view} />
+
+      <Add isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }

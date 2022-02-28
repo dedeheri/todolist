@@ -9,21 +9,19 @@ import { labels } from "../labelsjson";
 import Add from "./Add";
 import InputLabel from "./InputLabel";
 
-function Sidebar({ showMenu }) {
+function Sidebar({ showMenu, setIsOpen }) {
   const [showInputLabel, setShowInputLabel] = useState(false);
-  let [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <div className="border-r h-screen p-8 md:block hidden transition duration-500 space-y-1">
+      <div className="border-r border-white dark:border-[#30363d] h-screen p-8 md:block hidden transition duration-500 space-y-1">
         <button
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(true)}
           className="flex space-x-3 mb-4 items-center p-1 w-full bg-green-200 hover:bg-green-300 cursor-pointer transition duration-300 rounded-md"
         >
           <GrAdd fontSize={25} />
           <p className=" font-semibold text-xl">Add Task</p>
-          <Add isOpen={isOpen} setIsOpen={setIsOpen} />
         </button>
         <div className="flex space-x-3 items-center p-1 hover:bg-green-100 cursor-pointer transition duration-300 rounded-md">
           <MdOutlineFeed fontSize={25} />
@@ -73,12 +71,11 @@ function Sidebar({ showMenu }) {
         <div className="border-r h-screen p-8 animate-slide-in transition duration-500 space-y-1">
           <button
             type="button"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen(true)}
             className="flex space-x-3 mb-4 items-center p-1 w-full bg-green-200 hover:bg-green-300 cursor-pointer transition duration-300 rounded-md"
           >
             <GrAdd fontSize={30} />
             <p className=" font-semibold text-xl">Add Task</p>
-            <Add isOpen={isOpen} setIsOpen={setIsOpen} />
           </button>
           <div className="flex space-x-3 items-center p-1 hover:bg-green-100 cursor-pointer transition duration-300 rounded-md">
             <MdOutlineFeed fontSize={30} />

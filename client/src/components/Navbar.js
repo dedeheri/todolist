@@ -16,7 +16,7 @@ function Navbar({ view, setView, showMenu, setShowMenu }) {
   const [searchShow, setSearchShow] = useState(false);
 
   return (
-    <div className="font-roboto shadow-sm h-14 px-3 md:px-10 flex items-center justify-between">
+    <div className="font-roboto border-b dark:border-[#30363d] h-14 px-3 md:px-10 flex items-center justify-between bg-white text-black dark:bg-[#0d1117] dark:text-white">
       <div className="flex space-x-2 items-center">
         <button
           onClick={() => setShowMenu(!showMenu)}

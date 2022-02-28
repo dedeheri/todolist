@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
@@ -29,8 +30,8 @@ module.exports = {
 
       "slide-in-right": {
         "0%": {
-          "-webkit-transform": "translateX(10px)",
-          transform: "translateX(10px)",
+          "-webkit-transform": "translateX(200px)",
+          transform: "translateX(200px)",
         },
         "100%": {
           "-webkit-transform": "translateX(0px)",
@@ -63,7 +64,7 @@ module.exports = {
       "slide-in": "slide-in 0.4s ease-in-out",
       "slide-in-up":
         "slide-in-up 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940)",
-      "slide-in-right": "slide-in 0.4s ease-in-out",
+      "slide-in-right": "slide-in-right 0.4s ease-in-out",
       "slide-down": "slide-down 0.1s  ease-in",
       "slide-fwd":
         " slide-fwd 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",

@@ -19,7 +19,7 @@ function InputLabel() {
             {addEmoji.length == 0 ? "😄" : addEmoji.native}
           </button>
 
-          <input className="border rounded-lg w-[143px] outline-none px-1" />
+          <input className="border rounded-lg w-[139px] outline-none px-1" />
         </div>
 
         <div className="flex justify-end px-1">

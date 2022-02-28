@@ -5,7 +5,7 @@ import { data } from "../json";
 
 import Card from "./Card";
 
-import { BsPin } from "react-icons/bs";
+import { RiPushpinLine } from "react-icons/ri";
 
 const Content = ({ view }) => {
   const location = useLocation();
@@ -24,7 +24,7 @@ const Content = ({ view }) => {
                   key={i}
                   className="mb-2  flex items-center space-x-1 text-gray-600"
                 >
-                  <BsPin fontSize={18} />
+                  <RiPushpinLine fontSize={18} />
                   <p className="text-lg ">Pins</p>
                 </div>
               )
@@ -48,7 +48,13 @@ const Content = ({ view }) => {
           {data.today
             .slice(0, 1)
             .map(
-              (c, i) => c.pins && <div key={i} className="border-t my-5 " />
+              (c, i) =>
+                c.pins && (
+                  <div
+                    key={i}
+                    className="border-t border-white dark:border-[#30363d] my-5 "
+                  />
+                )
             )}
           <div className={view ? colsView : listView}>
             {data.today.map(
