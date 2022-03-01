@@ -1,23 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { data } from "../json";
-
 import Card from "./Card";
-
 import { RiPushpinLine } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { getTask } from "../redux/action/task";
 
-const Content = ({ view }) => {
+const Content = () => {
   const location = useLocation();
 
   const colsView = "grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
   const listView = "grid gap-2 grid-cols-1";
 
+  const { grid } = useSelector((state) => state.style);
+  const {
+    loading,
+    success: { task },
+  } = useSelector((state) => state.task);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getTask());
+  }, []);
+
+  console.log(task);
+
   switch (location.pathname) {
     case "/":
       return (
         <div className="px-1 mt-5 ">
-          {data.today.slice(0, 1).map(
+          {task?.data?.slice(0, 1).map(
             (c, i) =>
               c.pins && (
                 <div
@@ -29,24 +42,24 @@ const Content = ({ view }) => {
                 </div>
               )
           )}
-          <div className={view ? colsView : listView}>
-            {data.today.map(
+          <div className={grid ? colsView : listView}>
+            {task?.data?.map(
               (x, i) =>
                 x.pins && (
                   <Card
                     key={i}
-                    labels={x.labels}
-                    view={view}
-                    icons={x.icons}
-                    title={x.title}
+                    label={x?.label}
+                    grid={grid}
+                    icons={x?.label?.icons}
+                    title={x.content}
                     date={x.date}
                   />
                 )
             )}
           </div>
 
-          {data.today
-            .slice(0, 1)
+          {task?.data
+            ?.slice(0, 1)
             .map(
               (c, i) =>
                 c.pins && (
@@ -56,16 +69,16 @@ const Content = ({ view }) => {
                   />
                 )
             )}
-          <div className={view ? colsView : listView}>
-            {data.today.map(
+          <div className={grid ? colsView : listView}>
+            {task?.data?.map(
               (x, i) =>
-                x.pins == false && (
+                x.pins == null && (
                   <Card
                     key={i}
-                    labels={x.labels}
-                    view={view}
-                    icons={x.icons}
-                    title={x.title}
+                    label={x?.label}
+                    grid={grid}
+                    icons={x?.label?.icons}
+                    title={x.content}
                     date={x.date}
                   />
                 )

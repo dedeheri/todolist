@@ -6,9 +6,9 @@ import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { HiOutlineArchive } from "react-icons/hi";
 import { RiPushpinLine } from "react-icons/ri";
 
-function Card({ title, view, labels, icons, date }) {
-  function transcut(props, view) {
-    if (view) {
+function Card({ title, grid, label, date }) {
+  function transcut(props, grid) {
+    if (grid) {
       return props.length > 120 ? props.substring(0, 120) + "..." : props;
     } else {
       return props;
@@ -22,17 +22,47 @@ function Card({ title, view, labels, icons, date }) {
         <p className="whitespace-nowrap font-medium">{date}</p>
       </div>
       <p className="text-md leading-5 md:text-lg md:leading-5">
-        {transcut(title, view)}
+        {transcut(title, grid)}
       </p>
 
-      <div className="flex justify-between items-center">
-        <div className="bg-gray-100 dark:bg-[#20262d] py-1 px-3 rounded-xl flex space-x-2">
-          <p>{icons}</p>
-          <p className="font-medium text-md">{labels}</p>
-        </div>
+      {label ? (
+        <div className="flex justify-between items-center">
+          <div className="bg-gray-100 dark:bg-[#20262d] py-1 px-3 rounded-xl flex space-x-2">
+            <p>{label?.icons}</p>
+            <p className="font-medium text-md">{label?.title}</p>
+          </div>
 
-        <div className="opacity-0 group-hover:opacity-100 trasition duration-500">
-          <div className="lg:flex hidden items-center space-x-1 ">
+          <div className="opacity-0 group-hover:opacity-100 trasition duration-500">
+            <div className="lg:flex hidden items-center space-x-1 ">
+              <RiPushpinLine
+                fontSize={30}
+                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
+              />
+              <MdDeleteOutline
+                fontSize={30}
+                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
+              />
+              <MdOutlineEdit
+                fontSize={30}
+                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
+              />
+              <HiOutlineArchive
+                fontSize={30}
+                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
+              />
+            </div>
+
+            <div className="lg:hidden flex items-center space-x-1 ">
+              <BsThreeDotsVertical
+                fontSize={30}
+                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="opacity-0 group-hover:opacity-100  trasition duration-500">
+          <div className="flex justify-between items-center space-x-1 ">
             <RiPushpinLine
               fontSize={30}
               className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
@@ -50,14 +80,8 @@ function Card({ title, view, labels, icons, date }) {
               className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
             />
           </div>
-          <div className="lg:hidden flex items-center space-x-1 ">
-            <BsThreeDotsVertical
-              fontSize={30}
-              className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
-            />
-          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

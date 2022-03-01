@@ -7,8 +7,8 @@ const validation = {
 const label = mongoose.Schema(
   {
     userId: { ...validation },
+    icons: { ...validation },
     title: { ...validation },
-    icon: { ...validation },
   },
   { timestamps: true }
 );

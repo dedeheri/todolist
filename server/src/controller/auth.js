@@ -46,7 +46,7 @@ const signIn = async (req, res, next) => {
   const { email, password } = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(403).json({ validaton: errors.array() });
+    return res.status(403).json({ validation: errors.array() });
   }
 
   const authModel = await auth.findOne({ email });

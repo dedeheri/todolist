@@ -18,28 +18,37 @@ import { AiOutlinePicture } from "react-icons/ai";
 import Button from "./Button";
 
 import { labels } from "../labelsjson";
+import { useDispatch, useSelector } from "react-redux";
+import { SLIDETASK_COMPONENTS } from "../redux/action-type";
 
-function Add({ isOpen, setIsOpen }) {
+function Add() {
   const [date, setDate] = useState(null);
   const [calendar, setCalender] = useState(false);
   const [label, setLabel] = useState(false);
   const [selectLabel, setSelectLabel] = useState(null);
+
+  const { slideTask } = useSelector((state) => state.style);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     calendar ? setDate(new Date()) : setDate(null);
     label ? setSelectLabel(labels[0]) : setSelectLabel(null);
   }, [calendar, label]);
 
+  function closeAddTask() {
+    dispatch({ type: SLIDETASK_COMPONENTS, slideTask: false });
+  }
+
   return (
     <>
-      {isOpen && (
+      {slideTask && (
         <div className="absolute z-50 top-14 right-0 h-screen w-1/3 border-l dark:border-[#30363d] animate-slide-in-right bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 ">
           <div className="flex justify-between items-center mt-4">
             <p className="font-medium text-xl">Add Task</p>
 
             <div
               className="p-1 cursor-pointer hover:bg-green-100 rounded-lg duration-300 transition "
-              onClick={() => setIsOpen(false)}
+              onClick={closeAddTask}
             >
               <MdClose fontSize={25} />
             </div>

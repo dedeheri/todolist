@@ -10,24 +10,24 @@ function InputLabel() {
 
   return (
     <>
-      <div className="p-1 border rounded-lg animate-slide-down ">
+      <div className="p-1 border dark:border-[#30363d] rounded-lg animate-slide-down ">
         <div className="flex space-x-2">
           <button
             onClick={() => setShowEmoji(!showEmoji)}
-            className="border rounded-lg p-1"
+            className="border dark:border-[#30363d] rounded-lg p-1"
           >
             {addEmoji.length == 0 ? "😄" : addEmoji.native}
           </button>
 
-          <input className="border rounded-lg w-[139px] outline-none px-1" />
+          <input className="border dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white rounded-lg w-[139px] outline-none px-1" />
         </div>
 
-        <div className="flex justify-end px-1">
+        <div className="flex justify-end px-1 my-3">
           <button
             type="submit"
-            className="bg-green-200 p-1 mt-1 rounded-lg hover:bg-green-300 transition duration-300"
+            className=" px-3 py-1 rounded-lg hover:bg-gray-100 hover:dark:bg-[#31363D] bg-gray-100 dark:bg-[#20262d] transition duration-300"
           >
-            Done
+            Add Label
           </button>
         </div>
       </div>
@@ -35,6 +35,7 @@ function InputLabel() {
       {showEmoji && (
         <div className="animate-slide-down ">
           <Picker
+            theme={"dark"}
             style={{ position: "absolute" }}
             set={"twitter"}
             onSelect={(emoji) => setAddEmoji(emoji)}
