@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 // headles UI
 import { Menu, Transition } from "@headlessui/react";
@@ -12,16 +12,30 @@ import {
   HiOutlineSearch,
 } from "react-icons/hi";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { AiOutlineClose } from "react-icons/ai";
 import { BiCalendar } from "react-icons/bi";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-import { BsMoonStars } from "react-icons/bs";
+import { BsMoonStars, BsFillSunFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { GRID_COMPONENTS, MENU_COMPONENTS } from "../redux/action-type";
+import {
+  DARKMODE_ON_COMPONENTS,
+  DARKMODE_OFF_COMPONENTS,
+  GRID_COMPONENTS,
+  MENU_COMPONENTS,
+  REMOVE_VALUE_SEARCH_TERM,
+  SEARCH_TERM,
+} from "../redux/action-type";
 
 function Navbar() {
   const [searchShow, setSearchShow] = useState(false);
+  const [dark, setDark] = useState(true);
 
   const { menu, grid } = useSelector((state) => state.style);
+  // const {
+  //   loading,
+  //   success: { info },
+  // } = useSelector((state) => state.authorization);
+
   const dispatch = useDispatch();
 
   function openMenu() {
@@ -37,6 +51,25 @@ function Navbar() {
   function listMode() {
     dispatch({ type: GRID_COMPONENTS, grid: true });
   }
+
+  function searchText(e) {
+    const text = e.target.value;
+    text.length > 0
+      ? dispatch({ type: SEARCH_TERM, search: text })
+      : dispatch({ type: REMOVE_VALUE_SEARCH_TERM });
+  }
+
+  function handleDarkMode(dark) {
+    dark
+      ? dispatch({ type: DARKMODE_ON_COMPONENTS })
+      : dispatch({ type: DARKMODE_OFF_COMPONENTS });
+  }
+
+  console.log(dark);
+
+  useEffect(() => {
+    handleDarkMode(dark);
+  }, [dark]);
 
   return (
     <div className="font-roboto sticky top-0 w-min-full border-b dark:border-[#30363d] h-14 px-3 md:px-6 flex items-center justify-between bg-white text-black dark:bg-[#0d1117] dark:text-white">
@@ -62,16 +95,24 @@ function Navbar() {
         </p>
       </div>
 
-      <div className="flex space-x-3 items-center">
+      <div className="flex space-x-2 items-center">
         {searchShow && (
-          <input
-            className="animate-side-in-right dark:border-[#30363d] border-b bg-white text-black dark:bg-[#0d1117] dark:text-white  outline-none w-28 ml-6"
-            placeholder="Search..."
-          />
+          <>
+            <AiOutlineClose
+              onClick={() => setSearchShow(false)}
+              className="hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer p-1 rounded-lg transition duration-300"
+              fontSize={30}
+            />
+            <input
+              onChange={searchText}
+              className="animate-side-in-right dark:border-[#30363d] border-b bg-white text-black dark:bg-[#0d1117] dark:text-white  outline-none w-28 ml-6"
+              placeholder="Search..."
+            />
+          </>
         )}
 
         <HiOutlineSearch
-          onClick={() => setSearchShow(!searchShow)}
+          onClick={() => setSearchShow(true)}
           className="hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer p-1 rounded-lg transition duration-300"
           fontSize={30}
         />
@@ -114,8 +155,15 @@ function Navbar() {
               <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white dark:bg-[#0d1117] border dark:border-[#30363d] divide-y rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="p-1">
                   <Menu.Item>
-                    <button className="group hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full p-2 ">
-                      <BsMoonStars fontSize={18} />
+                    <button
+                      onClick={() => setDark(!dark)}
+                      className="group hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full p-2 "
+                    >
+                      {dark ? (
+                        <BsFillSunFill fontSize={18} />
+                      ) : (
+                        <BsMoonStars fontSize={18} />
+                      )}
                       <p>Appearance</p>
                     </button>
                   </Menu.Item>

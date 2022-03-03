@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 
 // icons
 import { NavLink } from "react-router-dom";
-import Add from "./Add";
-import Content from "./Content";
+import Add from "../components/Add";
+import Content from "../components/Content";
 
 function Main() {
   const { menu } = useSelector((state) => state.style);
@@ -29,56 +29,21 @@ function Main() {
               isActive ? stateAcitive : stateNoAcitive
             }
           >
-            Today
+            List
           </NavLink>
 
           <NavLink
-            to={"/tomorrow"}
+            to={"/complate"}
             className={({ isActive }) =>
               isActive ? stateAcitive : stateNoAcitive
             }
           >
-            Tomorrow
-          </NavLink>
-
-          <NavLink
-            to={"/oneweek"}
-            className={({ isActive }) =>
-              isActive ? stateAcitive : stateNoAcitive
-            }
-          >
-            One Week
-          </NavLink>
-          <NavLink
-            to={"/twoWeek"}
-            className={({ isActive }) =>
-              isActive ? stateAcitive : stateNoAcitive
-            }
-          >
-            Two Week
-          </NavLink>
-          <NavLink
-            to={"/all"}
-            className={({ isActive }) =>
-              isActive ? stateAcitive : stateNoAcitive
-            }
-          >
-            All
-          </NavLink>
-
-          <NavLink
-            to={"/complete"}
-            className={({ isActive }) =>
-              isActive ? stateAcitive : stateNoAcitive
-            }
-          >
-            Complete
+            Complate
           </NavLink>
         </div>
       </div>
 
       <Content />
-      <Add />
     </div>
   );
 }

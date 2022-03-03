@@ -1,43 +1,85 @@
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 
-import InputFiles from "react-input-files";
+// import DatePicker from "react-date-picker";
+// import "react-calendar/dist/Calendar.css";
+// import "react-date-picker/dist/entry.nostyle";
 
-import DatePicker from "react-date-picker";
-import "react-calendar/dist/Calendar.css";
-import "react-date-picker/dist/entry.nostyle";
+// import "react-modern-calendar-datepicker/lib/DatePicker.css";
+// import DatePicker from "react-modern-calendar-datepicker";
+
+import Datepicker from "@themesberg/tailwind-datepicker/Datepicker";
 
 // icons
 import { HiOutlineArchive, HiSelector } from "react-icons/hi";
 import { BiCalendar, BiLabel } from "react-icons/bi";
-import { BsCheck } from "react-icons/bs";
-import { MdClose } from "react-icons/md";
+
+import { MdClose, MdTitle } from "react-icons/md";
 import { RiPushpinLine } from "react-icons/ri";
-import { AiOutlinePicture } from "react-icons/ai";
 
 import Button from "./Button";
 
-import { labels } from "../labelsjson";
 import { useDispatch, useSelector } from "react-redux";
-import { SLIDETASK_COMPONENTS } from "../redux/action-type";
+import {
+  REMOVE_DATA_IN_ADD_TASK,
+  SLIDETASK_COMPONENTS,
+} from "../redux/action-type";
+import { addTask } from "../redux/action/task";
+import moment from "moment";
 
 function Add() {
+  const {
+    loading,
+    success: { labels },
+  } = useSelector((state) => state.labels);
+
+  const { slideTask } = useSelector((state) => state.style);
+  const {
+    add: { message, error },
+  } = useSelector((state) => state.task);
+  const dispatch = useDispatch();
+
   const [date, setDate] = useState(null);
+  const [idLabels, setIdLabels] = useState(null);
+  const [content, setContent] = useState("");
+  const [pins, setPins] = useState(false);
+  const [archive, setArchive] = useState(false);
+  const [title, setTitle] = useState(null);
+
+  const [showTitle, setShowTitle] = useState(false);
   const [calendar, setCalender] = useState(false);
   const [label, setLabel] = useState(false);
   const [selectLabel, setSelectLabel] = useState(null);
 
-  const { slideTask } = useSelector((state) => state.style);
-  const dispatch = useDispatch();
+  const currentDate = new Date();
+  useEffect(() => {
+    calendar
+      ? setDate(moment(currentDate).format("YYYY-MM-DD"))
+      : setDate(null);
+    label ? setSelectLabel(labels?.data[0]) : setSelectLabel(null);
+    showTitle ? setTitle("") : setTitle(null);
+  }, [calendar, label, showTitle]);
 
   useEffect(() => {
-    calendar ? setDate(new Date()) : setDate(null);
-    label ? setSelectLabel(labels[0]) : setSelectLabel(null);
-  }, [calendar, label]);
+    selectLabel !== false ? setIdLabels(selectLabel?._id) : setIdLabels(null);
+  }, [selectLabel]);
 
   function closeAddTask() {
     dispatch({ type: SLIDETASK_COMPONENTS, slideTask: false });
   }
+
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    dispatch(addTask(content, title, date, idLabels, pins, archive));
+  };
+
+  useEffect(() => {
+    if (message?.length > 0) {
+      dispatch({ type: SLIDETASK_COMPONENTS, slideTask: false });
+    }
+
+    return () => dispatch({ type: REMOVE_DATA_IN_ADD_TASK });
+  }, [message]);
 
   return (
     <>
@@ -47,29 +89,49 @@ function Add() {
             <p className="font-medium text-xl">Add Task</p>
 
             <div
-              className="p-1 cursor-pointer hover:bg-green-100 rounded-lg duration-300 transition "
+              className="p-1 cursor-pointer hover:bg-gray-100 hover:dark:bg-[#20262d] rounded-lg duration-300 transition "
               onClick={closeAddTask}
             >
               <MdClose fontSize={25} />
             </div>
           </div>
 
-          <div className="w-full mt-8 space-y-3">
-            {calendar && (
+          <div className="w-full mt-8">
+            {showTitle && (
               <div className="flex items-center space-x-3 animate-slide-down">
+                <p className="font-medium">Title : </p>
+                <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2">
+                  <input
+                    onChange={(e) => setTitle(e.target.value)}
+                    type="text"
+                    className="h-5 bg-transparent outline-none"
+                  />
+                </div>
+              </div>
+            )}
+
+            {calendar && (
+              <div className="flex items-center space-x-3 animate-slide-down mt-2">
                 <p className="font-medium">Date : </p>
-                <DatePicker onChange={setDate} value={date} />
+                <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2">
+                  <input
+                    value={date || ""}
+                    onChange={(e) => setDate(e.target.value)}
+                    type="date"
+                    className="h-5 bg-transparent outline-none"
+                  />
+                </div>
               </div>
             )}
 
             {label && (
-              <div className="flex items-center space-x-3 animate-slide-down">
+              <div className="flex items-center space-x-3 animate-slide-down mt-2">
                 <p className="font-medium">Label : </p>
                 <Listbox value={selectLabel} onChange={setSelectLabel}>
                   <div className="relative">
-                    <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] cursor-pointer">
+                    <Listbox.Button className="relative w-full py-1 pl-2 pr-10 text-left bg-white dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] cursor-pointer text-lg">
                       <span className="block truncate">
-                        {selectLabel?.icon} {selectLabel?.title}
+                        {selectLabel?.icons} {selectLabel?.title}
                       </span>
                       <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <HiSelector
@@ -84,37 +146,25 @@ function Add() {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {labels.map((label, i) => (
+                      <Listbox.Options className="absolute  scrollbar-hide w-full py-1 mt-1 overflow-auto text-base border dark:border-[#30363d]  bg-white  dark:bg-[#0d1117]  rounded-md shadow-lg max-h-60 focus:outline-none sm:text-sm">
+                        {Object.values(labels?.data).map((label, i) => (
                           <Listbox.Option
                             key={i}
                             className={({ active }) =>
-                              `cursor-default select-none relative py-2 pl-10 pr-4 ${
-                                active ? "bg-green-200" : "text-gray-900"
+                              ` flex space-x-2 cursor-pointer select-none relative  px-2 py-1 ${
+                                active
+                                  ? "dark:bg-[#30363d] bg-gray-200"
+                                  : "text-black dark:text-white bg-white z-10"
                               }`
                             }
                             value={label}
                           >
-                            {({ selectLabel }) => (
-                              <>
-                                <span
-                                  className={`block truncate ${
-                                    selectLabel ? "font-medium" : "font-normal"
-                                  }`}
-                                >
-                                  {label.icon}
-                                  {label.title}
-                                </span>
-                                {selectLabel ? (
-                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-green-600">
-                                    <BsCheck
-                                      className="w-5 h-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
+                            <span className="block  text-lg">
+                              {label.icons}
+                            </span>
+                            <span className="block whitespace-nowrap  text-lg">
+                              {label.title}
+                            </span>
                           </Listbox.Option>
                         ))}
                       </Listbox.Options>
@@ -123,43 +173,97 @@ function Add() {
                 </Listbox>
               </div>
             )}
-            <textarea className="border dark:border-[#30363d] dark:bg-[#0d1117] duration-150  rounded-md w-full h-28 outline-none p-2 " />
+            <textarea
+              onChange={(e) => setContent(e.target.value)}
+              className="border dark:border-[#30363d] dark:bg-[#0d1117] duration-150  rounded-md w-full h-28 outline-none p-2 mt-5"
+            />
 
-            <div className="flex cursor-pointer items-center justify-between">
-              <RiPushpinLine
-                fontSize={32}
-                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full "
-              />
-              <HiOutlineArchive
-                fontSize={32}
-                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full "
-              />
-              <InputFiles>
-                <AiOutlinePicture
+            <div className="flex cursor-pointer items-center justify-between mt-3">
+              <div className="relative group">
+                <RiPushpinLine
+                  onClick={() => setPins(!pins)}
                   fontSize={32}
-                  className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full "
+                  className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
+                    pins
+                      ? "hover:dark:bg-[#20262d] hover:bg-gray-100 dark:text-white dark:bg-[#31363D] bg-gray-200 text-black"
+                      : "dark:text-white text-black"
+                  } `}
                 />
-              </InputFiles>
-              <BiLabel
-                onClick={() => setLabel(!label)}
-                fontSize={32}
-                className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
-                  label ? "text-black bg-green-200" : "text-gray-800"
-                } `}
-              />
-              <BiCalendar
-                onClick={() => setCalender(!calendar)}
-                fontSize={32}
-                className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
-                  calendar
-                    ? "hover:dark:bg-[#20262d] hover:bg-gray-100"
-                    : "text-gray-400"
-                } `}
-              />
+                <p className="absolute top-10 bg-gray-200 dark:bg-[#20262d]  hover:bg-gray-200 p-2 rounded-xl scale-0 group-hover:scale-100 duration-100 transition">
+                  Pins
+                </p>
+              </div>
+
+              <div className="relative group">
+                <HiOutlineArchive
+                  onClick={() => setArchive(!archive)}
+                  fontSize={32}
+                  className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
+                    archive
+                      ? "hover:dark:bg-[#20262d] hover:bg-gray-100 dark:text-white dark:bg-[#31363D] bg-gray-200 text-black"
+                      : "dark:text-white text-black"
+                  } `}
+                />
+                <p className="absolute  top-10 bg-gray-200 dark:bg-[#20262d]  hover:bg-gray-200 p-2 rounded-xl scale-0 group-hover:scale-100 duration-100 transition">
+                  Archive
+                </p>
+              </div>
+
+              <div className="relative group">
+                <MdTitle
+                  onClick={() => setShowTitle(!showTitle)}
+                  fontSize={32}
+                  className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
+                    showTitle
+                      ? "hover:dark:bg-[#20262d] hover:bg-gray-100 dark:text-white dark:bg-[#31363D] bg-gray-200 text-black"
+                      : "dark:text-white text-black"
+                  } `}
+                />
+
+                <p className="absolute top-10 bg-gray-200 dark:bg-[#20262d]  hover:bg-gray-200 p-2 rounded-xl scale-0 group-hover:scale-100 duration-100 transition">
+                  Title
+                </p>
+              </div>
+
+              <div className="relative group">
+                <BiLabel
+                  onClick={() => setLabel(!label)}
+                  fontSize={32}
+                  className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
+                    label
+                      ? "hover:dark:bg-[#20262d] hover:bg-gray-100 dark:text-white dark:bg-[#31363D] bg-gray-200 text-black"
+                      : "dark:text-white text-black"
+                  } `}
+                />
+
+                <p className="absolute top-10 bg-gray-200 dark:bg-[#20262d]  hover:bg-gray-200 p-2 rounded-xl scale-0 group-hover:scale-100 duration-100 transition">
+                  Label
+                </p>
+              </div>
+
+              <div className="relative group">
+                <BiCalendar
+                  onClick={() => setCalender(!calendar)}
+                  fontSize={32}
+                  className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
+                    calendar
+                      ? "hover:dark:bg-[#20262d] hover:bg-gray-100 dark:text-white dark:bg-[#31363D] bg-gray-200 text-black"
+                      : "dark:text-white text-black"
+                  } `}
+                />
+
+                <p className="absolute top-10 bg-gray-200 dark:bg-[#20262d]  hover:bg-gray-200 p-2 rounded-xl scale-0 group-hover:scale-100 duration-100 transition">
+                  Date
+                </p>
+              </div>
             </div>
 
-            <div className="flex justify-end">
-              <Button />
+            <div className="flex justify-end mt-16">
+              <Button
+                onClick={handleAddTask}
+                title={"Add Task"}
+                width={"md:w-1/2 w-full"}
+              />
             </div>
           </div>
         </div>

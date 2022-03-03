@@ -45,16 +45,17 @@ const getLabels = async (req, res, next) => {
 const addTask = async (req, res, next) => {
   const userId = req.user._id;
 
-  const { content, date, pins, archive, label } = req.body;
+  const { content, date, pins, archive, label, title } = req.body;
 
   try {
     const newTask = new task({
       userId,
       content,
+      title,
       date,
       pins,
       archive,
-      label: "621ceba2a8a2f04a27f7abdb",
+      label,
     });
 
     const saveTask = await newTask.save();
@@ -81,9 +82,42 @@ const getTask = async (req, res, next) => {
   }
 };
 
+const getTaskByLabel = async (req, res, next) => {
+  const userId = req.user._id;
+  const slug = req.params.slug;
+
+  const taskModel = await task
+    .find({ userId })
+    .sort({ createdAt: -1 })
+    .populate("label");
+
+  function findBySlug(tasks) {
+    const result = tasks.filter((task) => {
+      if (task.label !== null) {
+        return task.label.title === slug;
+      }
+    });
+
+    return result;
+  }
+
+  const resultFindBySlug = findBySlug(taskModel);
+
+  try {
+    return res.status(200).json({
+      message: "success",
+      total: taskModel.length,
+      data: resultFindBySlug,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   addLabel,
   getLabels,
   addTask,
   getTask,
+  getTaskByLabel,
 };

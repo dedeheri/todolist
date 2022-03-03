@@ -1,4 +1,12 @@
-import { FAILED_GET_TASK, GET_TASK } from "../action-type";
+import {
+  ADD_TASK,
+  FAILED_ADD_TASK,
+  FAILED_GET_TASK,
+  GET_TASK,
+  GET_TASK_BY_LABEL,
+  NO_DATA_IN_TASK_BY_LABEL,
+  REMOVE_DATA_IN_ADD_TASK,
+} from "../action-type";
 
 const intialState = {
   success: {
@@ -7,6 +15,16 @@ const intialState = {
   loading: true,
   failed: {
     error: [],
+  },
+
+  add: {
+    message: "",
+    error: "",
+  },
+
+  byLabel: {
+    task: [],
+    message: [],
   },
 };
 
@@ -30,7 +48,53 @@ function task(state = intialState, action) {
         },
       };
     }
+    case ADD_TASK: {
+      return {
+        ...state,
+        loading: false,
+        add: {
+          message: action.payload,
+        },
+      };
+    }
 
+    case FAILED_ADD_TASK: {
+      return {
+        ...state,
+        loading: false,
+        add: {
+          error: action.payload,
+        },
+      };
+    }
+
+    case REMOVE_DATA_IN_ADD_TASK: {
+      return {
+        ...state,
+        loading: true,
+        add: {},
+      };
+    }
+
+    case GET_TASK_BY_LABEL: {
+      return {
+        ...state,
+        loading: false,
+        byLabel: {
+          task: action.payload,
+        },
+      };
+    }
+
+    case NO_DATA_IN_TASK_BY_LABEL: {
+      return {
+        ...state,
+        loading: false,
+        byLabel: {
+          message: action.payload,
+        },
+      };
+    }
     default:
       return state;
   }

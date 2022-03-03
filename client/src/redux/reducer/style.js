@@ -1,7 +1,10 @@
 import {
-  DARKMODE_COMPONENTS,
+  DARKMODE_ON_COMPONENTS,
+  DARKMODE_OFF_COMPONENTS,
   GRID_COMPONENTS,
   MENU_COMPONENTS,
+  REMOVE_VALUE_SEARCH_TERM,
+  SEARCH_TERM,
   SLIDETASK_COMPONENTS,
 } from "../action-type";
 
@@ -10,6 +13,7 @@ const initalState = {
   slideTask: false,
   darkMode: true,
   grid: true,
+  search: "",
 };
 
 function style(state = initalState, action) {
@@ -26,16 +30,16 @@ function style(state = initalState, action) {
         grid: action.grid,
       };
     }
-    case DARKMODE_COMPONENTS: {
+    case DARKMODE_ON_COMPONENTS: {
       return {
         ...state,
-        darkMode: action.darkmode,
+        darkMode: true,
       };
     }
-    case DARKMODE_COMPONENTS: {
+    case DARKMODE_OFF_COMPONENTS: {
       return {
         ...state,
-        darkMode: action.darkmode,
+        darkMode: false,
       };
     }
     case SLIDETASK_COMPONENTS: {
@@ -44,7 +48,18 @@ function style(state = initalState, action) {
         slideTask: action.slideTask,
       };
     }
-
+    case SEARCH_TERM: {
+      return {
+        ...state,
+        search: action.search,
+      };
+    }
+    case REMOVE_VALUE_SEARCH_TERM: {
+      return {
+        ...state,
+        search: "",
+      };
+    }
     default:
       return state;
   }

@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 
-const validation = {
-  type: String,
-  trim: true,
-};
 const task = mongoose.Schema(
   {
-    userId: { ...validation },
-    content: { ...validation, required: true },
-    pins: { ...validation, default: null },
-    archive: { ...validation, default: null },
-    date: { ...validation, default: null },
+    userId: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    content: { type: String, trim: true, required: true },
+    title: { type: String, trim: true, default: null },
+    pins: { type: Boolean, trim: true, default: false },
+    archive: { type: Boolean, trim: true, default: false },
+    date: { type: String, trim: true, default: false },
     label: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "label",
