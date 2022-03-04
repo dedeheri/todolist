@@ -1,4 +1,9 @@
-const { GET_LOGGIN, FAILED_GET_LOGGIN } = require("../action-type");
+const {
+  GET_LOGGIN,
+  FAILED_GET_LOGGIN,
+  GET_DATA_USERS,
+  FAILED_GET_DATA_USERS,
+} = require("../action-type");
 
 const initalState = {
   loading: true,
@@ -8,6 +13,11 @@ const initalState = {
   failed: {
     error: [],
     validation: [],
+  },
+
+  users: {
+    data: [],
+    error: [],
   },
 };
 
@@ -33,6 +43,25 @@ function authorization(state = initalState, action) {
       };
     }
 
+    case GET_DATA_USERS: {
+      return {
+        ...state,
+        loading: false,
+        users: {
+          data: action.payload,
+        },
+      };
+    }
+
+    case FAILED_GET_DATA_USERS: {
+      return {
+        ...state,
+        loading: false,
+        users: {
+          error: action.payload,
+        },
+      };
+    }
     default:
       return state;
   }

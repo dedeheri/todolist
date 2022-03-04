@@ -8,7 +8,7 @@ import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import { HiOutlineArchive } from "react-icons/hi";
 import { RiPushpinLine } from "react-icons/ri";
 
-function Card({ content, grid, label, date, title }) {
+function Card({ content, grid, label, date, title, pins }) {
   function transcut(props, grid) {
     if (grid) {
       return props.length > 120 ? props.substring(0, 120) + "..." : props;
@@ -70,10 +70,6 @@ function Card({ content, grid, label, date, title }) {
         ) : (
           <div className="opacity-0 group-hover:opacity-100 trasition inset-0 duration-500">
             <div className="flex justify-between items-center space-x-1 ">
-              <RiPushpinLine
-                fontSize={30}
-                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
-              />
               <MdDeleteOutline
                 fontSize={30}
                 className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"

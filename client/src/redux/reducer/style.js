@@ -6,6 +6,7 @@ import {
   REMOVE_VALUE_SEARCH_TERM,
   SEARCH_TERM,
   SLIDETASK_COMPONENTS,
+  CALENDER_COMPONENTS,
 } from "../action-type";
 
 const initalState = {
@@ -14,6 +15,7 @@ const initalState = {
   darkMode: true,
   grid: true,
   search: "",
+  calender: false,
 };
 
 function style(state = initalState, action) {
@@ -58,6 +60,12 @@ function style(state = initalState, action) {
       return {
         ...state,
         search: "",
+      };
+    }
+    case CALENDER_COMPONENTS: {
+      return {
+        ...state,
+        calender: action.calender,
       };
     }
     default:

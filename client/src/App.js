@@ -14,6 +14,8 @@ import { MENU_COMPONENTS } from "./redux/action-type";
 import { getTask } from "./redux/action/task";
 import TaskByLabel from "./pages/TaskByLabel";
 import Add from "./components/Add";
+import { getDataUsers } from "./redux/action/authorization";
+import Calender from "./components/Calender";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,6 +27,10 @@ function App() {
   useEffect(() => {
     dispatch(getTask());
   }, [message]);
+
+  useEffect(() => {
+    dispatch(getDataUsers());
+  }, []);
 
   useEffect(() => {
     function hideMenuAuto() {
@@ -42,7 +48,7 @@ function App() {
       <Navbar />
       <Grid>
         <Sidebar />
-
+        <Calender />
         <Add />
         <Routes>
           <Route path="/" element={<Home />} />

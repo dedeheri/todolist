@@ -74,7 +74,23 @@ const signIn = async (req, res, next) => {
   }
 };
 
+const users = async (req, res, next) => {
+  const id = req.user._id;
+
+  const authModel = await auth.findOne({ _id: id }, "email");
+  if (!authModel) {
+    return res.status(404).json({ message: "No Data" });
+  }
+
+  try {
+    return res.status(200).json({ message: "success", data: authModel });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signUp,
   signIn,
+  users,
 };

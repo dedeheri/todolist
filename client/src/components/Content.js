@@ -66,6 +66,7 @@ const Content = () => {
                 x.archive == false && (
                   <Card
                     key={i}
+                    pins={x.pins}
                     label={x?.label}
                     grid={grid}
                     icons={x?.label?.icons}
@@ -85,6 +86,7 @@ const Content = () => {
                 x.archive == false && (
                   <Card
                     key={i}
+                    pins={x.pins}
                     label={x?.label}
                     grid={grid}
                     icons={x?.label?.icons}

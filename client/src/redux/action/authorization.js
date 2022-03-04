@@ -1,4 +1,4 @@
-import { FAILED_GET_LOGGIN, GET_LOGGIN } from "../action-type";
+import { FAILED_GET_LOGGIN, GET_DATA_USERS, GET_LOGGIN } from "../action-type";
 import Cookies from "js-cookie";
 
 import url from "../../api/url";
@@ -34,6 +34,22 @@ export function getLoggin(email, password) {
           error: error.response.data.message,
         });
       }
+    }
+  };
+}
+
+export function getDataUsers() {
+  return async (dispatch) => {
+    try {
+      const { data } = await url.get("/users", {
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${Cookies.get("Token")}`,
+        },
+      });
+      dispatch({ type: GET_DATA_USERS, payload: data });
+    } catch (error) {
+      console.log(error);
     }
   };
 }

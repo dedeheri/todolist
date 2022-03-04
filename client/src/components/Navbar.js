@@ -24,6 +24,7 @@ import {
   MENU_COMPONENTS,
   REMOVE_VALUE_SEARCH_TERM,
   SEARCH_TERM,
+  CALENDER_COMPONENTS,
 } from "../redux/action-type";
 
 function Navbar() {
@@ -31,10 +32,12 @@ function Navbar() {
   const [dark, setDark] = useState(true);
 
   const { menu, grid } = useSelector((state) => state.style);
-  // const {
-  //   loading,
-  //   success: { info },
-  // } = useSelector((state) => state.authorization);
+  const {
+    loading,
+    users: {
+      data: { data },
+    },
+  } = useSelector((state) => state.authorization);
 
   const dispatch = useDispatch();
 
@@ -52,6 +55,10 @@ function Navbar() {
     dispatch({ type: GRID_COMPONENTS, grid: true });
   }
 
+  function calendarOpen() {
+    dispatch({ type: CALENDER_COMPONENTS, calender: true });
+  }
+
   function searchText(e) {
     const text = e.target.value;
     text.length > 0
@@ -65,14 +72,12 @@ function Navbar() {
       : dispatch({ type: DARKMODE_OFF_COMPONENTS });
   }
 
-  console.log(dark);
-
   useEffect(() => {
     handleDarkMode(dark);
   }, [dark]);
 
   return (
-    <div className="font-roboto sticky top-0 w-min-full border-b dark:border-[#30363d] h-14 px-3 md:px-6 flex items-center justify-between bg-white text-black dark:bg-[#0d1117] dark:text-white">
+    <div className="font-roboto sticky top-0 w-min-full border-b dark:border-[#30363d] h-14 px-3 md:px-6 flex items-center justify-between bg-white text-black dark:bg-[#0d1117] dark:text-white z-50">
       <div className="flex space-x-2 items-center">
         {!menu ? (
           <button
@@ -117,6 +122,7 @@ function Navbar() {
           fontSize={30}
         />
         <BiCalendar
+          onClick={calendarOpen}
           fontSize={30}
           className="hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer p-1 rounded-lg transition duration-300"
         />
@@ -139,7 +145,7 @@ function Navbar() {
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="inline-flex px-2  hover:bg-gray-100 hover:dark:bg-[#31363D] items-center justify-center w-full text-sm font-medium text-black dark:text-white rounded-lg duration-500">
-                dedeheri@gmail.com
+                {data?.email}
                 <MdKeyboardArrowDown fontSize={26} />
               </Menu.Button>
             </div>
@@ -152,12 +158,12 @@ function Navbar() {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white dark:bg-[#0d1117] border dark:border-[#30363d] divide-y rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="p-1">
+              <Menu.Items className="absolute z-50 right-0 w-56 mt-2 origin-top-right bg-white dark:bg-[#0d1117] border dark:border-[#30363d] divide-y rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="p-1 ">
                   <Menu.Item>
                     <button
                       onClick={() => setDark(!dark)}
-                      className="group hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full p-2 "
+                      className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full p-2 "
                     >
                       {dark ? (
                         <BsFillSunFill fontSize={18} />
