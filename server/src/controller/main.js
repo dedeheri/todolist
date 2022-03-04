@@ -8,7 +8,13 @@ const addLabel = async (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(403).json({ validation: errors.array() });
+    return res.status(403).json({ message: { validation: errors.array() } });
+  }
+
+  const checkTitleExist = await label.findOne({ title });
+
+  if (checkTitleExist) {
+    return res.status(200).json({ message: { error: "Title Already Exist" } });
   }
 
   try {
@@ -45,14 +51,21 @@ const getLabels = async (req, res, next) => {
 const addTask = async (req, res, next) => {
   const userId = req.user._id;
 
-  const { content, date, pins, archive, label, title } = req.body;
+  const { content, startDate, endDate, pins, archive, label, title } = req.body;
+
+  // validation
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(403).json({ validaton: errors.array() });
+  }
 
   try {
     const newTask = new task({
       userId,
       content,
       title,
-      date,
+      startDate,
+      endDate,
       pins,
       archive,
       label,
@@ -114,10 +127,30 @@ const getTaskByLabel = async (req, res, next) => {
   }
 };
 
+const getTaskById = async (req, res, next) => {
+  const todo = req.query.todo;
+  console.log(todo);
+
+  const taskModel = await task
+    .findOne({ _id: todo })
+    .sort({ createdAt: -1 })
+    .populate("label");
+
+  try {
+    return res.status(200).json({
+      message: "success",
+      data: taskModel,
+    });
+  } catch (error) {
+    res.status(404).json({ message: "Id not found" });
+  }
+};
+
 module.exports = {
   addLabel,
   getLabels,
   addTask,
   getTask,
   getTaskByLabel,
+  getTaskById,
 };

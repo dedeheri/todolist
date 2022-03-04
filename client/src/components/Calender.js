@@ -9,6 +9,10 @@ import { CALENDER_COMPONENTS } from "../redux/action-type";
 
 function Calender() {
   const { darkMode, calender } = useSelector((state) => state.style);
+  const {
+    loading,
+    success: { task },
+  } = useSelector((state) => state.task);
 
   const dispatch = useDispatch();
   function closeCalender() {
@@ -41,29 +45,16 @@ function Calender() {
     }
   }, [darkMode, calender]);
 
-  const events = [
-    {
-      id: 1,
-      color: "#fd3153",
-      from: "2019-05-02T18:00:00+00:00",
-      to: "2019-05-05T19:00:00+00:00",
-      title: "This is an event",
-    },
-    {
-      id: 2,
-      color: "#1ccb9e",
-      from: "2019-05-01T13:00:00+00:00",
-      to: "2019-05-05T14:00:00+00:00",
-      title: "This is another event",
-    },
-    {
-      id: 3,
-      color: "#3694DF",
-      from: new Date(),
-      to: new Date(),
-      title: "This is also another event",
-    },
-  ];
+  const events = [];
+  for (let i = 0; i < task?.data?.length; i++) {
+    events.push({
+      id: task?.data[i]._id,
+      color: "#8BA6C5",
+      from: task?.data[i].startDate,
+      to: task?.data[i].endDate,
+      title: task?.data[i].content,
+    });
+  }
 
   return (
     <>

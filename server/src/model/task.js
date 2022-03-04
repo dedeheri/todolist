@@ -11,7 +11,8 @@ const task = mongoose.Schema(
     title: { type: String, trim: true, default: null },
     pins: { type: Boolean, trim: true, default: false },
     archive: { type: Boolean, trim: true, default: false },
-    date: { type: String, trim: true, default: false },
+    startDate: { type: String, trim: true, default: null },
+    endDate: { type: String, trim: true, default: null },
     label: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "label",

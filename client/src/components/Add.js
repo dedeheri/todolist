@@ -1,9 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
-import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
-import "react-calendar/dist/Calendar.css";
 // icons
 import { HiOutlineArchive, HiSelector } from "react-icons/hi";
 import { BiCalendar, BiLabel } from "react-icons/bi";
@@ -20,6 +17,10 @@ import {
 } from "../redux/action-type";
 import { addTask } from "../redux/action/task";
 import moment from "moment";
+
+import DatePicker from "react-date-picker";
+import "react-calendar/dist/Calendar.css";
+import "react-date-picker/dist/DatePicker.css";
 
 function Add() {
   const {
@@ -39,8 +40,8 @@ function Add() {
   const [archive, setArchive] = useState(false);
   const [title, setTitle] = useState(null);
 
-  // date
-  const [rangeDate, setRangeDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const [showTitle, setShowTitle] = useState(false);
   const [calendar, setCalender] = useState(false);
@@ -48,7 +49,13 @@ function Add() {
   const [selectLabel, setSelectLabel] = useState(null);
 
   useEffect(() => {
-    calendar ? setRangeDate([new Date(), new Date()]) : setRangeDate(null);
+    if (calendar) {
+      setStartDate(new Date());
+      setEndDate(new Date());
+    } else {
+      setStartDate(null);
+      setEndDate(null);
+    }
     label ? setSelectLabel(labels?.data[0]) : setSelectLabel(null);
     showTitle ? setTitle("") : setTitle(null);
   }, [calendar, label, showTitle]);
@@ -64,15 +71,7 @@ function Add() {
   const handleAddTask = (e) => {
     e.preventDefault();
     dispatch(
-      addTask(
-        content,
-        title,
-        rangeDate?.[0],
-        rangeDate?.[1],
-        idLabels,
-        pins,
-        archive
-      )
+      addTask(content, title, idLabels, startDate, endDate, pins, archive)
     );
   };
 
@@ -84,12 +83,10 @@ function Add() {
     return () => dispatch({ type: REMOVE_DATA_IN_ADD_TASK });
   }, [message]);
 
-  console.log(rangeDate?.[0]);
-
   return (
     <>
       <div
-        className={`fixed z-10 top-14 right-0 h-screen w-1/3 border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ${
+        className={`fixed z-10 top-14 right-0 h-screen w-full md:w-1/3 border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ${
           slideTask ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -121,14 +118,22 @@ function Add() {
           {calendar && (
             <div className="flex items-center space-x-3 animate-slide-down mt-2">
               <p className="font-medium">Date : </p>
-              <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2">
-                <DateRangePicker
-                  onChange={setRangeDate}
+              <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2 space-x-4">
+                <DatePicker
+                  onChange={setStartDate}
                   clearIcon={<MdClose fontSize={20} />}
                   calendarIcon={<BiCalendar fontSize={20} />}
-                  calendarClassName={"dark:bg-[#0d1117] "}
+                  calendarClassName={"dark:bg-[#0d1117]"}
                   className={"dark:text-white text-black"}
-                  value={rangeDate}
+                  value={startDate}
+                />
+                <DatePicker
+                  onChange={setEndDate}
+                  clearIcon={<MdClose fontSize={20} />}
+                  calendarIcon={<BiCalendar fontSize={20} />}
+                  calendarClassName={"dark:bg-[#0d1117]"}
+                  className={"dark:text-white text-black"}
+                  value={endDate}
                 />
               </div>
             </div>
@@ -138,8 +143,8 @@ function Add() {
             <div className="flex items-center space-x-3 animate-slide-down mt-2">
               <p className="font-medium">Label : </p>
               <Listbox value={selectLabel} onChange={setSelectLabel}>
-                <div className="relative">
-                  <Listbox.Button className="relative w-full py-1 pl-2 pr-10 text-left bg-white dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] cursor-pointer text-lg">
+                <div className="relative rounded-lg border dark:border-[#30363d]">
+                  <Listbox.Button className="relative w-full py-1 pl-2 pr-10 text-left   cursor-pointer text-lg">
                     <span className="block truncate">
                       {selectLabel?.icons} {selectLabel?.title}
                     </span>
@@ -164,7 +169,7 @@ function Add() {
                             ` flex space-x-2 cursor-pointer select-none relative  px-2 py-1 ${
                               active
                                 ? "dark:bg-[#30363d] bg-gray-200"
-                                : "text-black dark:text-white bg-white z-10"
+                                : "text-black dark:bg-[#0d1117]   dark:text-white bg-white z-10"
                             }`
                           }
                           value={label}

@@ -21,6 +21,10 @@ const validate = (props) => {
         body("title", "Invalid title").notEmpty(),
       ];
     }
+
+    case "addtask": {
+      return [body("content", "Can not be empty").notEmpty()];
+    }
     default:
       return props;
   }

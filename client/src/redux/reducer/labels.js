@@ -1,4 +1,10 @@
-import { FAILED_GET_LABEL, GET_LABEL } from "../action-type";
+import {
+  ADD_LABEL,
+  FAILED_ADD_LABEL,
+  FAILED_GET_LABEL,
+  GET_LABEL,
+  REMOVE_MESSAGE_ADD_LABEL,
+} from "../action-type";
 
 const intialState = {
   loading: true,
@@ -6,6 +12,11 @@ const intialState = {
     labels: [],
   },
   failed: {
+    error: [],
+  },
+
+  add: {
+    message: [],
     error: [],
   },
 };
@@ -28,6 +39,34 @@ function labels(state = intialState, action) {
         failed: {
           error: action.payload,
         },
+      };
+    }
+
+    case ADD_LABEL: {
+      return {
+        ...state,
+        loading: false,
+        add: {
+          message: action.payload,
+        },
+      };
+    }
+
+    case FAILED_ADD_LABEL: {
+      return {
+        ...state,
+        loading: false,
+        add: {
+          error: action.payload,
+        },
+      };
+    }
+
+    case REMOVE_MESSAGE_ADD_LABEL: {
+      return {
+        ...state,
+        loading: true,
+        add: {},
       };
     }
     default:

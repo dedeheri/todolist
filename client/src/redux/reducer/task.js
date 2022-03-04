@@ -2,6 +2,7 @@ import {
   ADD_TASK,
   FAILED_ADD_TASK,
   FAILED_GET_TASK,
+  GET_DETAIL_TASK,
   GET_TASK,
   GET_TASK_BY_LABEL,
   NO_DATA_IN_TASK_BY_LABEL,
@@ -25,6 +26,11 @@ const intialState = {
   byLabel: {
     task: [],
     message: [],
+  },
+
+  detail: {
+    task: [],
+    error: {},
   },
 };
 
@@ -92,6 +98,16 @@ function task(state = intialState, action) {
         loading: false,
         byLabel: {
           message: action.payload,
+        },
+      };
+    }
+
+    case GET_DETAIL_TASK: {
+      return {
+        ...state,
+        loading: false,
+        detail: {
+          task: action.payload,
         },
       };
     }

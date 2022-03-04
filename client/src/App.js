@@ -16,6 +16,7 @@ import TaskByLabel from "./pages/TaskByLabel";
 import Add from "./components/Add";
 import { getDataUsers } from "./redux/action/authorization";
 import Calender from "./components/Calender";
+import Detail from "./components/Detail";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,6 +51,7 @@ function App() {
         <Sidebar />
         <Calender />
         <Add />
+        <Detail />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/complate" element={<Home />} />

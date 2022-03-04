@@ -4,6 +4,7 @@ import {
   ADD_TASK,
   FAILED_ADD_TASK,
   FAILED_GET_TASK,
+  GET_DETAIL_TASK,
   GET_TASK,
   GET_TASK_BY_LABEL,
 } from "../action-type";
@@ -26,7 +27,15 @@ export function getTask() {
   };
 }
 
-export function addTask(content, title, date, idLabels, pins, archive) {
+export function addTask(
+  content,
+  title,
+  idLabels,
+  startDate,
+  endDate,
+  pins,
+  archive
+) {
   return async (dispatch) => {
     try {
       const { data } = await url.post(
@@ -34,7 +43,8 @@ export function addTask(content, title, date, idLabels, pins, archive) {
         {
           content,
           title,
-          date,
+          startDate,
+          endDate,
           pins,
           archive,
           label: idLabels,
@@ -54,6 +64,17 @@ export function getTaskByLabels(params) {
     try {
       const { data } = await url.get(`taskbylabel/${params}`, config);
       dispatch({ type: GET_TASK_BY_LABEL, payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function getTaskById(params) {
+  return async (dispatch) => {
+    try {
+      const { data } = await url.get(`taskbyid/${params}`, config);
+      dispatch({ type: GET_DETAIL_TASK, payload: data });
     } catch (error) {
       console.log(error);
     }

@@ -7,15 +7,20 @@ import {
   SEARCH_TERM,
   SLIDETASK_COMPONENTS,
   CALENDER_COMPONENTS,
+  SLIDE_DETAIL,
 } from "../action-type";
 
 const initalState = {
   menu: false,
   slideTask: false,
-  darkMode: true,
+  darkMode: false,
   grid: true,
   search: "",
   calender: false,
+  detail: {
+    slideDetail: false,
+    idTask: "",
+  },
 };
 
 function style(state = initalState, action) {
@@ -66,6 +71,16 @@ function style(state = initalState, action) {
       return {
         ...state,
         calender: action.calender,
+      };
+    }
+
+    case SLIDE_DETAIL: {
+      return {
+        ...state,
+        detail: {
+          slideDetail: action.slideDetail,
+          idTask: action.idTask,
+        },
       };
     }
     default:

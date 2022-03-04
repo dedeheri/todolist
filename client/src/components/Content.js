@@ -5,6 +5,7 @@ import Card from "./Card";
 import { RiPushpinLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { getTask } from "../redux/action/task";
+import CardLoading from "./CardLoading";
 
 const Content = () => {
   const location = useLocation();
@@ -54,56 +55,64 @@ const Content = () => {
 
   const resultTags = getPinsInObject(task);
 
-  switch (location.pathname) {
-    case "/":
-      return (
-        <div className="px-1 mt-5 ">
-          {resultTags.textPins}
-          <div className={grid ? colsView : listView}>
-            {task?.data?.map(
-              (x, i) =>
-                x.pins == true &&
-                x.archive == false && (
-                  <Card
-                    key={i}
-                    pins={x.pins}
-                    label={x?.label}
-                    grid={grid}
-                    icons={x?.label?.icons}
-                    content={x.content}
-                    date={x.date}
-                    title={x.title}
-                  />
-                )
-            )}
-          </div>
+  if (loading) {
+    return <CardLoading />;
+  } else {
+    switch (location.pathname) {
+      case "/":
+        return (
+          <div className="px-1 mt-5 ">
+            {resultTags.textPins}
+            <div className={grid ? colsView : listView}>
+              {task?.data?.map(
+                (x, i) =>
+                  x.pins == true &&
+                  x.archive == false && (
+                    <Card
+                      id={x._id}
+                      key={i}
+                      pins={x.pins}
+                      label={x?.label}
+                      grid={grid}
+                      icons={x?.label?.icons}
+                      content={x.content}
+                      startDate={x.startDate}
+                      endDate={x.endDate}
+                      title={x.title}
+                    />
+                  )
+              )}
+            </div>
 
-          {resultTags.borderPins}
-          <div className={grid ? colsView : listView}>
-            {task?.data?.map(
-              (x, i) =>
-                x.pins == false &&
-                x.archive == false && (
-                  <Card
-                    key={i}
-                    pins={x.pins}
-                    label={x?.label}
-                    grid={grid}
-                    icons={x?.label?.icons}
-                    content={x.content}
-                    date={x.date}
-                    title={x.title}
-                  />
-                )
-            )}
+            {resultTags.borderPins}
+            <div className={grid ? colsView : listView}>
+              {task?.data?.map(
+                (x, i) =>
+                  x.pins == false &&
+                  x.archive == false && (
+                    <Card
+                      id={x._id}
+                      key={i}
+                      pins={x.pins}
+                      label={x?.label}
+                      grid={grid}
+                      icons={x?.label?.icons}
+                      content={x.content}
+                      startDate={x.startDate}
+                      endDate={x.endDate}
+                      title={x.title}
+                    />
+                  )
+              )}
+            </div>
           </div>
-        </div>
-      );
-    case "/complate":
-      return <div className="px-1 mt-5 ">a</div>;
+        );
+      case "/complate":
+        return <div className="px-1 mt-5 ">a</div>;
 
-    default:
-      return "error";
+      default:
+        return "error";
+    }
   }
 };
 

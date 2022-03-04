@@ -8,7 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getLabels } from "../redux/action/labels";
 import InputLabel from "./InputLabel";
-import { SLIDETASK_COMPONENTS } from "../redux/action-type";
+import {
+  REMOVE_MESSAGE_ADD_LABEL,
+  SLIDETASK_COMPONENTS,
+} from "../redux/action-type";
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
@@ -16,12 +19,21 @@ function Sidebar() {
   const {
     loading,
     success: { labels },
+    add: { message, error },
   } = useSelector((state) => state.labels);
   const { menu } = useSelector((state) => state.style);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getLabels());
-  }, []);
+  }, [message]);
+
+  useEffect(() => {
+    setShowInputLabel(false);
+    if (message?.message === "Working") {
+      return dispatch({ type: REMOVE_MESSAGE_ADD_LABEL });
+    }
+  }, [message]);
 
   function openAddTask() {
     dispatch({ type: SLIDETASK_COMPONENTS, slideTask: true });
@@ -42,7 +54,7 @@ function Sidebar() {
     "flex space-x-3 mb-4 items-center p-1 w-full  hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer transition duration-300 rounded-md";
   return (
     <>
-      <div className="border-r w-64 fixed border-white dark:border-[#30363d] h-full p-8 md:block hidden transition duration-500 space-y-1">
+      <div className="border-r  w-64 fixed  dark:border-[#30363d]  h-full p-8 md:block hidden  space-y-1">
         <button
           type="button"
           onClick={openAddTask}
@@ -77,7 +89,8 @@ function Sidebar() {
           />
         </div>
 
-        {showInputLabel && <InputLabel />}
+        {message?.message?.error && <p>{message?.message?.error}</p>}
+        {showInputLabel && <InputLabel showInputLabel={showInputLabel} />}
 
         <div className="space-y-1 overflow-scroll scrollbar-hide h-2/3">
           {labels?.data?.map(({ icons, title, _id }) => (
@@ -105,58 +118,70 @@ function Sidebar() {
 
       {/* mobile menu */}
 
-      {menu && (
-        <div className="border-r dark:border-[#30363d]  h-screen p-8 animate-slide-in transition duration-500 space-y-1">
-          <button
-            type="button"
-            onClick={openAddTask}
-            className="flex space-x-3 mb-4 items-center p-1 w-full  hover:bg-gray-100 hover:dark:bg-[#31363D] bg-gray-100 dark:bg-[#20262d] cursor-pointer transition duration-300 rounded-md "
-          >
-            <AiOutlinePlus fontSize={25} className="dark:text-white" />
-            <p className=" font-semibold text-xl">Add Task</p>
-          </button>
-          <div className="flex space-x-3 items-center p-1 hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer transition duration-300 rounded-md">
-            <MdOutlineFeed fontSize={25} />
-            <h1 className="font-semibold text-xl">Activity</h1>
-          </div>
+      <div
+        className={`border-r fixed bg-white dark:bg-[#0d1117] dark:text-white  dark:border-[#30363d]  h-screen p-8 transition duration-500  space-y-1 ${
+          menu ? "-translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <button
+          type="button"
+          onClick={openAddTask}
+          className="flex space-x-3 mb-4 items-center p-1 w-full  hover:bg-gray-100 hover:dark:bg-[#31363D] bg-gray-100 dark:bg-[#20262d] cursor-pointer transition duration-300 rounded-md "
+        >
+          <AiOutlinePlus fontSize={25} className="dark:text-white" />
+          <p className=" font-semibold text-xl">Add Task</p>
+        </button>
+        <NavLink
+          to={"/"}
+          end={true}
+          className={({ isActive }) => (isActive ? activeLink : noActiveLink)}
+        >
+          <MdOutlineFeed fontSize={25} />
+          <h1 className="font-semibold text-xl">Activity</h1>
+        </NavLink>
 
-          <div className="flex space-x-3 items-center p-1 hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer transition duration-300 rounded-md">
-            <MdOutlineArchive fontSize={25} />
-            <h1 className="font-semibold text-xl">Archive</h1>
-          </div>
-
-          <div className="flex items-center justify-between mt-5 p-1">
-            <p className="text-base font-medium text-gray-600">Label</p>
-            <BsPlusLg
-              onClick={() => setShowInputLabel(!showInputLabel)}
-              fontSize={20}
-              className="hover:bg-gray-100 hover:dark:bg-[#31363D] hover-animation rounded-full text-gray-600 p-1 cursor-pointer transition duration-300"
-            />
-          </div>
-
-          {showInputLabel && <InputLabel />}
-
-          <div className="space-y-1">
-            {labels?.data?.map(({ icons, title, _id }) => (
-              <div
-                key={_id}
-                className="group flex justify-between items-center hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer transition p-1 duration-300 w-full rounded-md"
-              >
-                <div className="flex space-x-1 items-center">
-                  <h1 className="text-lg">{icons}</h1>
-                  <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
-                </div>
-
-                <div className="px-2 flex items-center">
-                  <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
-                    <BsThreeDotsVertical />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+        <NavLink
+          to={"/archive"}
+          className={({ isActive }) => (isActive ? activeLink : noActiveLink)}
+        >
+          <MdOutlineArchive fontSize={25} />
+          <h1 className="font-semibold text-xl">Archive</h1>
+        </NavLink>
+        <div className="flex items-center justify-between mt-5 p-1">
+          <p className="text-base font-medium text-gray-600">Label</p>
+          <BsPlusLg
+            onClick={() => setShowInputLabel(!showInputLabel)}
+            fontSize={20}
+            className="hover:bg-gray-100 hover:dark:bg-[#31363D] hover-animation rounded-full text-gray-600 p-1 cursor-pointer transition duration-300"
+          />
         </div>
-      )}
+
+        {message?.message?.error && <p>{message?.message?.error}</p>}
+        {/* {showInputLabel && <InputLabel showInputLabel={showInputLabel} />} */}
+
+        <div className="space-y-1 overflow-scroll scrollbar-hide h-2/3">
+          {labels?.data?.map(({ icons, title, _id }) => (
+            <NavLink
+              to={`/label/${title}`}
+              key={_id}
+              className={({ isActive }) =>
+                isActive ? activeLinkLabel : noActiveLinkLabel
+              }
+            >
+              <div className="flex space-x-1 items-center">
+                <h1 className="text-lg">{icons}</h1>
+                <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
+              </div>
+
+              <div className="px-2 flex items-center">
+                <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
+                  <BsThreeDotsVertical />
+                </button>
+              </div>
+            </NavLink>
+          ))}
+        </div>
+      </div>
     </>
   );
 }

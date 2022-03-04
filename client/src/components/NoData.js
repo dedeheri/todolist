@@ -8,7 +8,7 @@ const NoData = () => {
   return (
     <div className="flex flex-col">
       <img src={ImageNoData} className="w-1/4  mx-auto " />
-      <h1 className="text-center text-4xl">Data is Empety in Label {slug}</h1>
+      <h1 className="text-center text-4xl">Data is Empty in Label {slug}</h1>
     </div>
   );
 };

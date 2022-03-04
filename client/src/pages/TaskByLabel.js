@@ -30,11 +30,7 @@ function TaskByLabel() {
   const colsView = "columns-2 md:columns-4 lg:colums-5 gap-2 space-y-2";
   const listView = "grid gap-2 grid-cols-1";
   return (
-    <div
-      className={`md:m-8 mt-8 px-3 w-full md:pl-64 transition duration-500 ${
-        menu ? "animate-slide-in " : ""
-      } `}
-    >
+    <div className="md:m-8 mt-8 px-3 w-full md:pl-64 transition duration-500 ">
       {taskByLabel?.data?.length == 0 ? (
         <NoData />
       ) : (
