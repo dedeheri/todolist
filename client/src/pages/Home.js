@@ -1,42 +1,125 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 
-// icons
-import { NavLink } from "react-router-dom";
-import Content from "../components/Content";
+import Card from "../components/Card";
+import { RiPushpinLine } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { getTask } from "../redux/action/task";
+import CardLoading from "../components/CardLoading";
+import { REMOVE_MESSAGE_PINS_TASK } from "../redux/action-type";
 
 function Main() {
-  const stateNoAcitive =
-    "text-lg whitespace-nowrap  dark:text-white hover:bg-gray-100 hover:dark:bg-[#20262d] px-2 py-1 rounded-lg cursor-pointer transition duration-300 ";
-  const stateAcitive =
-    "text-lg whitespace-nowrap bg-gray-100 dark:bg-[#20262d] px-2 py-1 bg-gray-100 rounded-lg cursor-pointer";
+  const colsView = "columns-2 md:columns-4 lg:colums-5 gap-2 space-y-2";
+  const listView = "grid gap-2 grid-cols-1";
+
+  const dispatch = useDispatch();
+  const { grid, search } = useSelector((state) => state.style);
+  const {
+    loading,
+    success: { task },
+    pin: { message_pin },
+  } = useSelector((state) => state.task);
+
+  const getPinsInObject = (tasks) => {
+    let getOneTags = [];
+    tasks?.data?.map((task) => {
+      if (task.pins == true) {
+        getOneTags.push(task.pins);
+      }
+    });
+
+    const textPins = Object.values(getOneTags || "")
+      .slice(0, 1)
+      .map((_, i) => {
+        return (
+          <div
+            key={i}
+            className="mb-2  flex items-center space-x-1 text-gray-600"
+          >
+            <RiPushpinLine fontSize={18} />
+            <p className="text-lg ">Pins</p>
+          </div>
+        );
+      });
+
+    const borderPins = Object.values(getOneTags || "")
+      .slice(0, 1)
+      .map((_, i) => {
+        return <div key={i} className="border-t dark:border-[#30363d] my-5 " />;
+      });
+
+    return {
+      textPins,
+      borderPins,
+    };
+  };
+
+  const resultTags = getPinsInObject(task);
+
+  const [resultSearch, setResultSearch] = useState([]);
+
+  useEffect(() => {
+    const keys = ["content", "title"];
+
+    const searchResult = task?.data?.filter((c) => {
+      return keys.some((key) => {
+        return c[key].toLowerCase().includes(search.toLowerCase());
+      });
+    });
+
+    setResultSearch(searchResult);
+  }, [task, search]);
 
   return (
-    <div className="md:m-8 mt-8 px-3 w-full md:pl-64 duration-500">
-      <div className="flex items-center overflow-x-scroll scrollbar-hide">
-        <div className="space-x-1 items-center flex">
-          <NavLink
-            to={"/"}
-            end={true}
-            className={({ isActive }) =>
-              isActive ? stateAcitive : stateNoAcitive
-            }
-          >
-            List
-          </NavLink>
+    <div className="md:m-8 mt-8 px-5 w-full md:pl-64 duration-500">
+      {loading ? (
+        <CardLoading />
+      ) : (
+        <>
+          {resultTags.textPins}
+          <div className={grid ? colsView : listView}>
+            {resultSearch?.map(
+              (x, i) =>
+                x.pins == true &&
+                x.archive == false && (
+                  <Card
+                    id={x._id}
+                    key={i}
+                    pin={x.pins}
+                    label={x?.label}
+                    grid={grid}
+                    icons={x?.label?.icons}
+                    content={x.content}
+                    startDate={x.startDate}
+                    endDate={x.endDate}
+                    title={x.title}
+                  />
+                )
+            )}
+          </div>
 
-          <NavLink
-            to={"/complate"}
-            className={({ isActive }) =>
-              isActive ? stateAcitive : stateNoAcitive
-            }
-          >
-            Complate
-          </NavLink>
-        </div>
-      </div>
-
-      <Content />
+          {resultTags.borderPins}
+          <div className={grid ? colsView : listView}>
+            {resultSearch?.map(
+              (x, i) =>
+                x.pins == false &&
+                x.archive == false && (
+                  <Card
+                    id={x._id}
+                    key={i}
+                    pin={x.pins}
+                    label={x?.label}
+                    grid={grid}
+                    icons={x?.label?.icons}
+                    content={x.content}
+                    startDate={x.startDate}
+                    endDate={x.endDate}
+                    title={x.title}
+                  />
+                )
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

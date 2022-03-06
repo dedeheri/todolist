@@ -1,46 +1,76 @@
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 import { getTaskById } from "../redux/action/task";
+
+import { BiCalendar } from "react-icons/bi";
+import { SLIDE_OOF_DETAIL } from "../redux/action-type";
 
 const Detail = () => {
   const {
-    detail: { slideDetail },
+    detail: { slideDetail, idTask },
   } = useSelector((state) => state.style);
   const {
-    loading,
     detail: { task: dataTask },
   } = useSelector((state) => state.task);
 
   const dispatch = useDispatch();
-
-  const { search } = useLocation();
   useEffect(() => {
-    dispatch(getTaskById(search));
-  }, [slideDetail]);
+    if (idTask.length > 0) {
+      dispatch(getTaskById(idTask));
+    }
+  }, [idTask]);
 
-  console.log(dataTask);
+  function closeSlide() {
+    dispatch({ type: SLIDE_OOF_DETAIL, slideDetail: false });
+  }
 
   return (
     <div
-      className={`fixed z-10 top-14 right-0 h-screen  md:w-1/2 w-full  border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ease-in-out ${
+      className={`fixed overflow-x-scroll scrollbar-hide z-10 top-0 right-0 h-full  md:w-1/2 w-full  border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ease-in-out ${
         slideDetail ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="flex justify-end mb-4 mx-3 cursor-pointer  ">
-        <h1 className="w-24 hover:bg-gray-100 hover:dark:bg-[#31363D]  bg-gray-100 dark:bg-[#20262d]  transition p-2 rounded-lg pl-7  duration-300">
+      <div className="flex justify-end mb-4 mx-3 cursor-pointer pt-20">
+        <h1
+          onClick={closeSlide}
+          className="w-24 hover:bg-gray-100 hover:dark:bg-[#31363D]  bg-gray-100 dark:bg-[#20262d]  transition p-2 rounded-lg pl-7  duration-300"
+        >
           Close
         </h1>
       </div>
 
-      <div>
-        <p className="font-medium text-2xl">title</p>
-        <p className="font-base text-xl">
-          {moment(dataTask.data?.startDate).format("ll")}
+      <div className="space-y-4">
+        {dataTask?.data?.title && (
+          <p className="font-medium text-2xl">{dataTask?.data?.title}</p>
+        )}
+
+        <div className="flex space-x-4 items-center">
+          {dataTask.data?.label && (
+            <div className="flex space-x-2 bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
+              <p className="font-base text-xl">{dataTask.data?.label?.icons}</p>
+              <p className="font-base text-xl">{dataTask.data?.label?.title}</p>
+            </div>
+          )}
+
+          {dataTask.data?.startDate && (
+            <div className="flex items-center space-x-2 bg-green-400 dark:bg-green-900 rounded-xl px-3 py-1">
+              <BiCalendar fontSize={23} />
+
+              <p className="font-base text-xl">
+                {moment(dataTask.data?.startDate).format("ll")}
+              </p>
+              <p className="font-base text-xl">-</p>
+              <p className="font-base text-xl">
+                {moment(dataTask.data?.endDate).format("ll")}
+              </p>
+            </div>
+          )}
+        </div>
+
+        <p className="font-base text-xl whitespace-pre-line">
+          {dataTask.data?.content}
         </p>
-        <p className="font-base text-xl">{dataTask.data?.label?.icons}</p>
-        <p className="font-base text-xl">{dataTask.data?.content}</p>
       </div>
     </div>
   );

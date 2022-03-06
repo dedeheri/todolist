@@ -7,6 +7,7 @@ import {
   GET_DETAIL_TASK,
   GET_TASK,
   GET_TASK_BY_LABEL,
+  PINS_TASK,
 } from "../action-type";
 
 const config = {
@@ -54,7 +55,10 @@ export function addTask(
 
       dispatch({ type: ADD_TASK, payload: data.message });
     } catch (error) {
-      dispatch({ type: FAILED_ADD_TASK, payload: error });
+      dispatch({
+        type: FAILED_ADD_TASK,
+        payload: error.response.data.validaton,
+      });
     }
   };
 }
@@ -75,6 +79,17 @@ export function getTaskById(params) {
     try {
       const { data } = await url.get(`taskbyid/${params}`, config);
       dispatch({ type: GET_DETAIL_TASK, payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function pinTask(params, body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await url.post(`pins/${params}`, { pin: body }, config);
+      dispatch({ type: PINS_TASK, payload: data.message });
     } catch (error) {
       console.log(error);
     }

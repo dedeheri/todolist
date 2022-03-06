@@ -22,6 +22,7 @@ const Archive = () => {
           (x, i) =>
             x.archive == true && (
               <Card
+                id={x._id}
                 key={i}
                 label={x?.label}
                 grid={grid}

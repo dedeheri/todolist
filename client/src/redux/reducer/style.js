@@ -8,6 +8,7 @@ import {
   SLIDETASK_COMPONENTS,
   CALENDER_COMPONENTS,
   SLIDE_DETAIL,
+  SLIDE_OOF_DETAIL,
 } from "../action-type";
 
 const initalState = {
@@ -80,6 +81,15 @@ function style(state = initalState, action) {
         detail: {
           slideDetail: action.slideDetail,
           idTask: action.idTask,
+        },
+      };
+    }
+    case SLIDE_OOF_DETAIL: {
+      return {
+        ...state,
+        detail: {
+          slideDetail: action.slideDetail,
+          idTask: "",
         },
       };
     }

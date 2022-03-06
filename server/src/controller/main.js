@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const task = require("../model/task");
 const label = require("../model/label");
+const { findByIdAndUpdate } = require("../model/task");
 
 const addLabel = async (req, res, next) => {
   const usersId = req.user._id;
@@ -128,11 +129,10 @@ const getTaskByLabel = async (req, res, next) => {
 };
 
 const getTaskById = async (req, res, next) => {
-  const todo = req.query.todo;
-  console.log(todo);
+  const id = req.params.id;
 
   const taskModel = await task
-    .findOne({ _id: todo })
+    .findOne({ _id: id })
     .sort({ createdAt: -1 })
     .populate("label");
 
@@ -146,6 +146,19 @@ const getTaskById = async (req, res, next) => {
   }
 };
 
+const pinsTask = async (req, res, next) => {
+  const id = req.params.id;
+  const pin = Boolean(req.body.pin);
+
+  try {
+    resultPins = await task.findByIdAndUpdate({ _id: id }, { pins: pin });
+
+    return res.status(200).json({ message: "success", data: resultPins });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   addLabel,
   getLabels,
@@ -153,4 +166,5 @@ module.exports = {
   getTask,
   getTaskByLabel,
   getTaskById,
+  pinsTask,
 };

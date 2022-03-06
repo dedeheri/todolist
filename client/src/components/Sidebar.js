@@ -13,6 +13,7 @@ import {
   SLIDETASK_COMPONENTS,
 } from "../redux/action-type";
 import { NavLink } from "react-router-dom";
+import LabelLoading from "./LabelLoading";
 
 function Sidebar() {
   const [showInputLabel, setShowInputLabel] = useState(false);
@@ -39,7 +40,7 @@ function Sidebar() {
     dispatch({ type: SLIDETASK_COMPONENTS, slideTask: true });
   }
   function transcut(text) {
-    return text.length > 12 ? text.substring(0, 12) + "..." : text;
+    return text.length > 9 ? text.substring(0, 9) + "..." : text;
   }
 
   const activeLinkLabel =
@@ -54,7 +55,7 @@ function Sidebar() {
     "flex space-x-3 mb-4 items-center p-1 w-full  hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer transition duration-300 rounded-md";
   return (
     <>
-      <div className="border-r  w-64 fixed  dark:border-[#30363d]  h-full p-8 md:block hidden  space-y-1">
+      <div className="border-r w-64 fixed  dark:border-[#30363d]  h-full p-8 md:block hidden  space-y-1">
         <button
           type="button"
           onClick={openAddTask}
@@ -90,29 +91,43 @@ function Sidebar() {
         </div>
 
         {message?.message?.error && <p>{message?.message?.error}</p>}
-        {showInputLabel && <InputLabel showInputLabel={showInputLabel} />}
+        {showInputLabel && <InputLabel />}
 
-        <div className="space-y-1 overflow-scroll scrollbar-hide h-2/3">
-          {labels?.data?.map(({ icons, title, _id }) => (
-            <NavLink
-              to={`/label/${title}`}
-              key={_id}
-              className={({ isActive }) =>
-                isActive ? activeLinkLabel : noActiveLinkLabel
-              }
-            >
-              <div className="flex space-x-1 items-center">
-                <h1 className="text-lg">{icons}</h1>
-                <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
-              </div>
+        {loading ? (
+          <LabelLoading />
+        ) : (
+          <div className="space-y-1 overflow-scroll scrollbar-hide h-2/3">
+            {labels?.data?.map(({ icons, title, _id }) => (
+              <NavLink
+                to={`/label/${title}`}
+                key={_id}
+                className={({ isActive }) =>
+                  isActive ? activeLinkLabel : noActiveLinkLabel
+                }
+              >
+                <div className="flex space-x-1 items-center">
+                  <h1 className="text-lg">{icons}</h1>
+                  <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
+                </div>
 
-              <div className="px-2 flex items-center">
-                <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
-                  <BsThreeDotsVertical />
-                </button>
-              </div>
-            </NavLink>
-          ))}
+                <div className="px-2 flex items-center">
+                  <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
+                    <BsThreeDotsVertical />
+                  </button>
+                </div>
+              </NavLink>
+            ))}
+          </div>
+        )}
+        <div className="text-sm text-gray-400 dark:text-gray-400">
+          Create By
+          <a
+            href="https://github.com/dedeheri/todolist"
+            target="_blank"
+            className="cursor-pointer underline"
+          >
+            Dede Heri
+          </a>
         </div>
       </div>
 
@@ -157,30 +172,34 @@ function Sidebar() {
         </div>
 
         {message?.message?.error && <p>{message?.message?.error}</p>}
-        {/* {showInputLabel && <InputLabel showInputLabel={showInputLabel} />} */}
+        {showInputLabel && <InputLabel />}
 
-        <div className="space-y-1 overflow-scroll scrollbar-hide h-2/3">
-          {labels?.data?.map(({ icons, title, _id }) => (
-            <NavLink
-              to={`/label/${title}`}
-              key={_id}
-              className={({ isActive }) =>
-                isActive ? activeLinkLabel : noActiveLinkLabel
-              }
-            >
-              <div className="flex space-x-1 items-center">
-                <h1 className="text-lg">{icons}</h1>
-                <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
-              </div>
+        {loading ? (
+          <LabelLoading />
+        ) : (
+          <div className="space-y-1 overflow-scroll scrollbar-hide h-2/3 ">
+            {labels?.data?.map(({ icons, title, _id }) => (
+              <NavLink
+                to={`/label/${title}`}
+                key={_id}
+                className={({ isActive }) =>
+                  isActive ? activeLinkLabel : noActiveLinkLabel
+                }
+              >
+                <div className="flex space-x-1 items-center">
+                  <h1 className="text-lg">{icons}</h1>
+                  <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
+                </div>
 
-              <div className="px-2 flex items-center">
-                <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
-                  <BsThreeDotsVertical />
-                </button>
-              </div>
-            </NavLink>
-          ))}
-        </div>
+                <div className="px-2 flex items-center">
+                  <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
+                    <BsThreeDotsVertical />
+                  </button>
+                </div>
+              </NavLink>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

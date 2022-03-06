@@ -16,7 +16,6 @@ import {
   SLIDETASK_COMPONENTS,
 } from "../redux/action-type";
 import { addTask } from "../redux/action/task";
-import moment from "moment";
 
 import DatePicker from "react-date-picker";
 import "react-calendar/dist/Calendar.css";
@@ -38,31 +37,41 @@ function Add() {
   const [content, setContent] = useState("");
   const [pins, setPins] = useState(false);
   const [archive, setArchive] = useState(false);
-  const [title, setTitle] = useState(null);
-
+  const [title, setTitle] = useState(" ");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   const [showTitle, setShowTitle] = useState(false);
   const [calendar, setCalender] = useState(false);
   const [label, setLabel] = useState(false);
-  const [selectLabel, setSelectLabel] = useState(null);
+  const [selectLabel, setSelectLabel] = useState(" ");
+
+  const [rows, setRows] = useState(3);
 
   useEffect(() => {
     if (calendar) {
       setStartDate(new Date());
       setEndDate(new Date());
+      setCalender(true);
     } else {
       setStartDate(null);
       setEndDate(null);
+      setCalender(false);
     }
-    label ? setSelectLabel(labels?.data[0]) : setSelectLabel(null);
-    showTitle ? setTitle("") : setTitle(null);
-  }, [calendar, label, showTitle]);
-
+  }, [calendar]);
+  useEffect(() => {
+    label ? setSelectLabel(labels?.data[0]) : setSelectLabel(" ");
+  }, [label]);
   useEffect(() => {
     selectLabel !== false ? setIdLabels(selectLabel?._id) : setIdLabels(null);
   }, [selectLabel]);
+
+  useEffect(() => {
+    const rowsHigh = content.split("\n");
+    if (rowsHigh.length > 3) {
+      setRows(rowsHigh.length);
+    }
+  }, [content]);
 
   function closeAddTask() {
     dispatch({ type: SLIDETASK_COMPONENTS, slideTask: false });
@@ -86,7 +95,7 @@ function Add() {
   return (
     <>
       <div
-        className={`fixed z-10 top-14 right-0 h-screen w-full md:w-1/3 border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ${
+        className={`fixed z-10 overflow-auto pt-10 pb-20 right-0 h-screen w-full md:w-1/3 border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ${
           slideTask ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -186,9 +195,19 @@ function Add() {
               </Listbox>
             </div>
           )}
+
+          {error && (
+            <div>
+              {error?.map(({ msg }) => (
+                <p key={msg}>{msg}</p>
+              ))}
+            </div>
+          )}
           <textarea
+            resize={"none"}
+            rows={rows}
             onChange={(e) => setContent(e.target.value)}
-            className="border dark:border-[#30363d] dark:bg-[#0d1117] duration-150  rounded-md w-full h-28 outline-none p-2 mt-5"
+            className="border dark:border-[#30363d] dark:bg-[#0d1117] duration-150  rounded-md w-full h-auto outline-none p-2 mt-5"
           />
 
           <div className="flex cursor-pointer items-center justify-between mt-3">

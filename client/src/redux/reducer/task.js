@@ -2,11 +2,14 @@ import {
   ADD_TASK,
   FAILED_ADD_TASK,
   FAILED_GET_TASK,
+  FAILED_PINS_TASK,
   GET_DETAIL_TASK,
   GET_TASK,
   GET_TASK_BY_LABEL,
   NO_DATA_IN_TASK_BY_LABEL,
+  PINS_TASK,
   REMOVE_DATA_IN_ADD_TASK,
+  REMOVE_MESSAGE_PINS_TASK,
 } from "../action-type";
 
 const intialState = {
@@ -31,6 +34,12 @@ const intialState = {
   detail: {
     task: [],
     error: {},
+    id: "",
+  },
+
+  pin: {
+    message_pin: "",
+    error_pin: "",
   },
 };
 
@@ -111,6 +120,35 @@ function task(state = intialState, action) {
         },
       };
     }
+
+    case PINS_TASK: {
+      return {
+        ...state,
+        loading: false,
+        pin: {
+          message_pin: action.payload,
+        },
+      };
+    }
+
+    case REMOVE_MESSAGE_PINS_TASK: {
+      return {
+        ...state,
+        loading: false,
+        pin: {},
+      };
+    }
+
+    case FAILED_PINS_TASK: {
+      return {
+        ...state,
+        loading: false,
+        pin: {
+          error_pin: action.payload,
+        },
+      };
+    }
+
     default:
       return state;
   }

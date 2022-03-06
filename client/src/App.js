@@ -10,7 +10,7 @@ import Archive from "./pages/Archive";
 
 import Auth from "./pages/Auth";
 
-import { MENU_COMPONENTS } from "./redux/action-type";
+import { MENU_COMPONENTS, REMOVE_MESSAGE_PINS_TASK } from "./redux/action-type";
 import { getTask } from "./redux/action/task";
 import TaskByLabel from "./pages/TaskByLabel";
 import Add from "./components/Add";
@@ -20,18 +20,23 @@ import Detail from "./components/Detail";
 
 function App() {
   const dispatch = useDispatch();
-  const { darkMode, menu } = useSelector((state) => state.style);
+  const { darkMode, menu, search } = useSelector((state) => state.style);
   const {
     add: { message, error },
+    pin: { message_pin },
   } = useSelector((state) => state.task);
 
   useEffect(() => {
     dispatch(getTask());
-  }, [message]);
+  }, [message, message_pin]);
 
   useEffect(() => {
     dispatch(getDataUsers());
   }, []);
+
+  useEffect(() => {
+    return () => dispatch({ type: REMOVE_MESSAGE_PINS_TASK });
+  }, [message_pin]);
 
   useEffect(() => {
     function hideMenuAuto() {
@@ -58,6 +63,7 @@ function App() {
           <Route path="/archive" element={<Archive />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/label/:slug" element={<TaskByLabel />} />
+          {/* <Route path="/:id" element={<Detail />} /> */}
         </Routes>
       </Grid>
     </div>

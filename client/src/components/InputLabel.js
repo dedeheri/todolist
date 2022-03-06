@@ -26,7 +26,7 @@ function InputLabel() {
     <>
       <form
         onSubmit={handleAddLabel}
-        className="p-1 rounded-lg animate-slide-down duration-500"
+        className="p-1 rounded-lg animate-slide-down duration-500 "
       >
         <div className="flex space-x-1">
           <div
@@ -38,7 +38,7 @@ function InputLabel() {
 
           <input
             onChange={(e) => setTitle(e.target.value)}
-            className="border dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white rounded-lg w-[139px] outline-none px-1"
+            className="border dark:border-[#30363d]  bg-white text-black dark:bg-[#0d1117] dark:text-white rounded-lg w-[139px] outline-none px-1"
           />
         </div>
 
