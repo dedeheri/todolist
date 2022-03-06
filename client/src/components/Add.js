@@ -1,9 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 
+// moment
+import moment from "moment";
+
 // icons
 import { HiOutlineArchive, HiSelector } from "react-icons/hi";
-import { BiCalendar, BiLabel } from "react-icons/bi";
+import { BiCalendar, BiLabel, BiTimeFive } from "react-icons/bi";
 
 import { MdClose, MdTitle } from "react-icons/md";
 import { RiPushpinLine } from "react-icons/ri";
@@ -40,11 +43,13 @@ function Add() {
   const [title, setTitle] = useState(" ");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [time, setTime] = useState(null);
 
   const [showTitle, setShowTitle] = useState(false);
   const [calendar, setCalender] = useState(false);
   const [label, setLabel] = useState(false);
   const [selectLabel, setSelectLabel] = useState(" ");
+  const [showTime, setShowTime] = useState(false);
 
   const [rows, setRows] = useState(3);
 
@@ -59,6 +64,10 @@ function Add() {
       setCalender(false);
     }
   }, [calendar]);
+
+  useEffect(() => {
+    showTime ? setTime(moment(new Date()).format("HH:mm")) : setTime(null);
+  }, [showTime]);
   useEffect(() => {
     label ? setSelectLabel(labels?.data[0]) : setSelectLabel(" ");
   }, [label]);
@@ -80,7 +89,7 @@ function Add() {
   const handleAddTask = (e) => {
     e.preventDefault();
     dispatch(
-      addTask(content, title, idLabels, startDate, endDate, pins, archive)
+      addTask(content, title, idLabels, startDate, endDate, time, pins, archive)
     );
   };
 
@@ -91,7 +100,6 @@ function Add() {
 
     return () => dispatch({ type: REMOVE_DATA_IN_ADD_TASK });
   }, [message]);
-
   return (
     <>
       <div
@@ -148,6 +156,19 @@ function Add() {
             </div>
           )}
 
+          {showTime && (
+            <div className="flex items-center space-x-3 animate-slide-down mt-2">
+              <p className="font-medium">Time : </p>
+              <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2">
+                <input
+                  value={time || " "}
+                  onChange={(e) => setTime(e.target.value)}
+                  type="time"
+                  className="h-5 bg-transparent outline-none"
+                />
+              </div>
+            </div>
+          )}
           {label && (
             <div className="flex items-center space-x-3 animate-slide-down mt-2">
               <p className="font-medium">Label : </p>
@@ -270,6 +291,22 @@ function Add() {
 
               <p className="absolute top-10 bg-gray-200 dark:bg-[#20262d]  hover:bg-gray-200 p-2 rounded-xl scale-0 group-hover:scale-100 duration-100 transition">
                 Label
+              </p>
+            </div>
+
+            <div className="relative group">
+              <BiTimeFive
+                onClick={() => setShowTime(!showTime)}
+                fontSize={32}
+                className={`hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full ${
+                  calendar
+                    ? "hover:dark:bg-[#20262d] hover:bg-gray-100 dark:text-white dark:bg-[#31363D] bg-gray-200 text-black"
+                    : "dark:text-white text-black"
+                } `}
+              />
+
+              <p className="absolute top-10 bg-gray-200 dark:bg-[#20262d]  hover:bg-gray-200 p-2 rounded-xl scale-0 group-hover:scale-100 duration-100 transition">
+                Time
               </p>
             </div>
 

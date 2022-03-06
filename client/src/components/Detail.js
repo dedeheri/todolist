@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTaskById } from "../redux/action/task";
 
-import { BiCalendar } from "react-icons/bi";
+import { BiCalendar, BiTimeFive } from "react-icons/bi";
 import { SLIDE_OOF_DETAIL } from "../redux/action-type";
 
 const Detail = () => {
@@ -46,15 +46,15 @@ const Detail = () => {
         )}
 
         <div className="flex space-x-4 items-center">
-          {dataTask.data?.label && (
-            <div className="flex space-x-2 bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
-              <p className="font-base text-xl">{dataTask.data?.label?.icons}</p>
-              <p className="font-base text-xl">{dataTask.data?.label?.title}</p>
+          {dataTask?.data?.time && (
+            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
+              <BiTimeFive fontSize={23} />
+              <p className="font-base text-xl">{dataTask?.data?.time}</p>
             </div>
           )}
 
-          {dataTask.data?.startDate && (
-            <div className="flex items-center space-x-2 bg-green-400 dark:bg-green-900 rounded-xl px-3 py-1">
+          {dataTask?.data?.startDate && (
+            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
               <BiCalendar fontSize={23} />
 
               <p className="font-base text-xl">
@@ -64,6 +64,13 @@ const Detail = () => {
               <p className="font-base text-xl">
                 {moment(dataTask.data?.endDate).format("ll")}
               </p>
+            </div>
+          )}
+
+          {dataTask?.data?.label && (
+            <div className="flex space-x-2 bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
+              <p className="font-base text-xl">{dataTask.data?.label?.icons}</p>
+              <p className="font-base text-xl">{dataTask.data?.label?.title}</p>
             </div>
           )}
         </div>

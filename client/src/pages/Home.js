@@ -91,6 +91,7 @@ function Main() {
                     content={x.content}
                     startDate={x.startDate}
                     endDate={x.endDate}
+                    time={x.time}
                     title={x.title}
                   />
                 )
@@ -113,6 +114,7 @@ function Main() {
                     content={x.content}
                     startDate={x.startDate}
                     endDate={x.endDate}
+                    time={x.time}
                     title={x.title}
                   />
                 )

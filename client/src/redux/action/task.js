@@ -2,7 +2,11 @@ import Cookies from "js-cookie";
 import url from "../../api/url";
 import {
   ADD_TASK,
+  ARCHIVE_TASK,
+  DELETE_TASK,
   FAILED_ADD_TASK,
+  FAILED_ARCHIVE_TASK,
+  FAILED_DELETE_TASK,
   FAILED_GET_TASK,
   GET_DETAIL_TASK,
   GET_TASK,
@@ -34,6 +38,7 @@ export function addTask(
   idLabels,
   startDate,
   endDate,
+  time,
   pins,
   archive
 ) {
@@ -47,6 +52,7 @@ export function addTask(
           startDate,
           endDate,
           pins,
+          time,
           archive,
           label: idLabels,
         },
@@ -88,10 +94,36 @@ export function getTaskById(params) {
 export function pinTask(params, body) {
   return async (dispatch) => {
     try {
-      const { data } = await url.post(`pins/${params}`, { pin: body }, config);
+      const { data } = await url.put(`pins/${params}`, { pin: body }, config);
       dispatch({ type: PINS_TASK, payload: data.message });
     } catch (error) {
       console.log(error);
+    }
+  };
+}
+
+export function archiveTask(params, body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await url.put(
+        `archive/${params}`,
+        { pin: body },
+        config
+      );
+      dispatch({ type: ARCHIVE_TASK, payload: data.message });
+    } catch (error) {
+      dispatch({ type: FAILED_ARCHIVE_TASK, payload: error });
+    }
+  };
+}
+
+export function deleteTask(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await url.delete(`task/${id}`, config);
+      dispatch({ type: DELETE_TASK, payload: data.message });
+    } catch (error) {
+      dispatch({ type: FAILED_DELETE_TASK, payload: error.response.data });
     }
   };
 }

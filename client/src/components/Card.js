@@ -4,14 +4,26 @@ import moment from "moment";
 
 // icons
 import { BsCalendarDate } from "react-icons/bs";
+import { BiTimeFive } from "react-icons/bi";
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
-import { HiOutlineArchive } from "react-icons/hi";
+import { HiOutlineArchive, HiArchive } from "react-icons/hi";
 import { RiPushpinLine, RiPushpinFill } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import { SLIDE_DETAIL } from "../redux/action-type";
-import { pinTask } from "../redux/action/task";
+import { MODAL_DELETE_ON, SLIDE_DETAIL } from "../redux/action-type";
+import { archiveTask, pinTask } from "../redux/action/task";
 
-function Card({ id, content, grid, label, startDate, endDate, title, pin }) {
+function Card({
+  id,
+  content,
+  grid,
+  label,
+  startDate,
+  endDate,
+  title,
+  pin,
+  archives,
+  time,
+}) {
   const dispatch = useDispatch();
 
   function transcut(props, grid) {
@@ -30,13 +42,30 @@ function Card({ id, content, grid, label, startDate, endDate, title, pin }) {
     dispatch(pinTask(id, pin));
   }
 
+  function archive(id, v) {
+    dispatch(archiveTask(id, v));
+  }
+
+  function deleteTask(id, title) {
+    dispatch({ type: MODAL_DELETE_ON, modal: true, idTask: id, title: title });
+  }
+
   return (
     <div className="cursor-pointer group break-inside-avoid-column">
       <div className="border dark:border-[#30363d] p-4 rounded-lg hover:border-gray-400 hover:dark:border-[#535555]  trasition duration-500">
         <div onClick={() => detail(id)} className="space-y-4 mt-2">
+          {time && (
+            <div className="flex justify-start">
+              <div className="flex space-x-2  dark:bg-[#20262d] bg-gray-100 py-1 px-3 rounded-xl   items-center dark:text-white text-black">
+                <BiTimeFive />
+                <p className="text-md font-medium"> {time}</p>
+              </div>
+            </div>
+          )}
+
           {startDate && endDate && (
-            <div className="flex justify-between">
-              <div className="flex space-x-2 dark:bg-green-900 bg-green-300 py-1 px-3  rounded-xl items-center dark:text-white text-black">
+            <div className="flex justify-start">
+              <div className="flex space-x-2 dark:bg-[#20262d] bg-gray-100 py-1 px-3  rounded-xl items-center dark:text-white text-black">
                 <BsCalendarDate fontSize={16} />
                 <p className="text-md font-medium">
                   {moment(startDate).format("LL")} -{" "}
@@ -78,6 +107,7 @@ function Card({ id, content, grid, label, startDate, endDate, title, pin }) {
             )}
 
             <MdDeleteOutline
+              onClick={() => deleteTask(id, title)}
               fontSize={30}
               className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
             />
@@ -85,10 +115,19 @@ function Card({ id, content, grid, label, startDate, endDate, title, pin }) {
               fontSize={30}
               className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
             />
-            <HiOutlineArchive
-              fontSize={30}
-              className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
-            />
+            {archives ? (
+              <HiArchive
+                onClick={() => archive(id, false)}
+                fontSize={30}
+                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
+              />
+            ) : (
+              <HiOutlineArchive
+                onClick={() => archive(id, true)}
+                fontSize={30}
+                className="hover:dark:bg-[#20262d] hover:bg-gray-100 hover:dark:white-black p-1 rounded-full"
+              />
+            )}
           </div>
         </div>
       </div>

@@ -9,6 +9,8 @@ import {
   CALENDER_COMPONENTS,
   SLIDE_DETAIL,
   SLIDE_OOF_DETAIL,
+  MODAL_DELETE_ON,
+  MODAL_DELETE_OFF,
 } from "../action-type";
 
 const initalState = {
@@ -22,6 +24,11 @@ const initalState = {
     slideDetail: false,
     idTask: "",
   },
+  modal: {
+    modalDelete: false,
+    idTask: "",
+    title: "",
+  },
 };
 
 function style(state = initalState, action) {
@@ -30,6 +37,22 @@ function style(state = initalState, action) {
       return {
         ...state,
         menu: action.menu,
+      };
+    }
+    case MODAL_DELETE_ON: {
+      return {
+        ...state,
+        modal: {
+          modalDelete: action.modal,
+          idTask: action.idTask,
+          title: action.title,
+        },
+      };
+    }
+    case MODAL_DELETE_OFF: {
+      return {
+        ...state,
+        modal: { modalDelete: action.modal, idTask: "" },
       };
     }
     case GRID_COMPONENTS: {

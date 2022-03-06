@@ -13,6 +13,7 @@ const task = mongoose.Schema(
     archive: { type: Boolean, trim: true, default: false },
     startDate: { type: String, trim: true, default: null },
     endDate: { type: String, trim: true, default: null },
+    time: { type: String, trim: true, default: null },
     label: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "label",

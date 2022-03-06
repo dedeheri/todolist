@@ -10,13 +10,19 @@ import Archive from "./pages/Archive";
 
 import Auth from "./pages/Auth";
 
-import { MENU_COMPONENTS, REMOVE_MESSAGE_PINS_TASK } from "./redux/action-type";
+import {
+  MENU_COMPONENTS,
+  REMOVE_DELETE_TASK,
+  REMOVE_MESSAGE_ARCHIVE_TASK,
+  REMOVE_MESSAGE_PINS_TASK,
+} from "./redux/action-type";
 import { getTask } from "./redux/action/task";
 import TaskByLabel from "./pages/TaskByLabel";
 import Add from "./components/Add";
 import { getDataUsers } from "./redux/action/authorization";
 import Calender from "./components/Calender";
 import Detail from "./components/Detail";
+import ModalDelete from "./components/ModalDelete";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,19 +30,27 @@ function App() {
   const {
     add: { message, error },
     pin: { message_pin },
+    delete: { message_delete },
+    archive: { message_archive },
   } = useSelector((state) => state.task);
+
+  console.log(message_archive);
 
   useEffect(() => {
     dispatch(getTask());
-  }, [message, message_pin]);
+  }, [message, message_pin, message_delete, message_archive]);
 
   useEffect(() => {
     dispatch(getDataUsers());
   }, []);
 
   useEffect(() => {
-    return () => dispatch({ type: REMOVE_MESSAGE_PINS_TASK });
-  }, [message_pin]);
+    return () => {
+      dispatch({ type: REMOVE_MESSAGE_PINS_TASK });
+      dispatch({ type: REMOVE_DELETE_TASK });
+      dispatch({ type: REMOVE_MESSAGE_ARCHIVE_TASK });
+    };
+  }, [message_pin, message_delete, message_archive]);
 
   useEffect(() => {
     function hideMenuAuto() {
@@ -57,6 +71,7 @@ function App() {
         <Calender />
         <Add />
         <Detail />
+        <ModalDelete />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/complate" element={<Home />} />

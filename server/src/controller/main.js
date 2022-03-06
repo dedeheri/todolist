@@ -1,7 +1,6 @@
 const { validationResult } = require("express-validator");
 const task = require("../model/task");
 const label = require("../model/label");
-const { findByIdAndUpdate } = require("../model/task");
 
 const addLabel = async (req, res, next) => {
   const usersId = req.user._id;
@@ -52,7 +51,8 @@ const getLabels = async (req, res, next) => {
 const addTask = async (req, res, next) => {
   const userId = req.user._id;
 
-  const { content, startDate, endDate, pins, archive, label, title } = req.body;
+  const { content, startDate, endDate, pins, archive, label, title, time } =
+    req.body;
 
   // validation
   const errors = validationResult(req);
@@ -70,6 +70,7 @@ const addTask = async (req, res, next) => {
       pins,
       archive,
       label,
+      time,
     });
 
     const saveTask = await newTask.save();
@@ -151,7 +152,36 @@ const pinsTask = async (req, res, next) => {
   const pin = Boolean(req.body.pin);
 
   try {
-    resultPins = await task.findByIdAndUpdate({ _id: id }, { pins: pin });
+    resultPins = await task.findByIdAndUpdate(
+      { _id: id },
+      { pins: pin, archive: false }
+    );
+
+    return res.status(200).json({ message: "success", data: resultPins });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteTask = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    resultPins = await task.findByIdAndDelete({ _id: id });
+
+    return res.status(200).json({ message: "success", data: resultPins });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const archiveTask = async (req, res, next) => {
+  const id = req.params.id;
+  const pin = req.body.pin;
+  try {
+    resultPins = await task.findByIdAndUpdate(
+      { _id: id },
+      { pins: false, archive: pin }
+    );
 
     return res.status(200).json({ message: "success", data: resultPins });
   } catch (error) {
@@ -167,4 +197,6 @@ module.exports = {
   getTaskByLabel,
   getTaskById,
   pinsTask,
+  deleteTask,
+  archiveTask,
 };

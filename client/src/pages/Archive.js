@@ -30,6 +30,7 @@ const Archive = () => {
                 content={x.content}
                 date={x.date}
                 title={x.title}
+                archives={x.archive}
               />
             )
         )}

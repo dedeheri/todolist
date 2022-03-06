@@ -1,6 +1,10 @@
 import {
   ADD_TASK,
+  ARCHIVE_TASK,
+  DELETE_TASK,
   FAILED_ADD_TASK,
+  FAILED_ARCHIVE_TASK,
+  FAILED_DELETE_TASK,
   FAILED_GET_TASK,
   FAILED_PINS_TASK,
   GET_DETAIL_TASK,
@@ -9,6 +13,8 @@ import {
   NO_DATA_IN_TASK_BY_LABEL,
   PINS_TASK,
   REMOVE_DATA_IN_ADD_TASK,
+  REMOVE_DELETE_TASK,
+  REMOVE_MESSAGE_ARCHIVE_TASK,
   REMOVE_MESSAGE_PINS_TASK,
 } from "../action-type";
 
@@ -40,6 +46,16 @@ const intialState = {
   pin: {
     message_pin: "",
     error_pin: "",
+  },
+
+  delete: {
+    message_delete: "",
+    error_delete: "",
+  },
+
+  archive: {
+    message_archive: "",
+    error_archive: "",
   },
 };
 
@@ -145,6 +161,62 @@ function task(state = intialState, action) {
         loading: false,
         pin: {
           error_pin: action.payload,
+        },
+      };
+    }
+
+    case ARCHIVE_TASK: {
+      return {
+        ...state,
+        loading: false,
+        archive: {
+          message_archive: action.payload,
+        },
+      };
+    }
+
+    case REMOVE_MESSAGE_ARCHIVE_TASK: {
+      return {
+        ...state,
+        loading: false,
+        archive: {},
+      };
+    }
+
+    case FAILED_ARCHIVE_TASK: {
+      return {
+        ...state,
+        loading: false,
+        archive: {
+          error_archive: action.payload,
+        },
+      };
+    }
+
+    case DELETE_TASK: {
+      return {
+        ...state,
+        loading: false,
+        delete: {
+          message_delete: action.payload,
+        },
+      };
+    }
+
+    case REMOVE_DELETE_TASK: {
+      return {
+        ...state,
+        loading: false,
+        delete: {},
+      };
+    }
+
+    case FAILED_DELETE_TASK: {
+      return {
+        ...state,
+        loading: false,
+        delete: {
+          error_delete: action.payload,
         },
       };
     }
