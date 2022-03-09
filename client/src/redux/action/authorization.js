@@ -1,4 +1,10 @@
-import { FAILED_GET_LOGGIN, GET_DATA_USERS, GET_LOGGIN } from "../action-type";
+import {
+  FAILED_GET_LOGGIN,
+  FAILED_REGISTER,
+  GET_DATA_USERS,
+  GET_LOGGIN,
+  GET_REGISTER,
+} from "../action-type";
 import Cookies from "js-cookie";
 
 import url from "../../api/url";
@@ -34,6 +40,25 @@ export function getLoggin(email, password) {
           error: error.response.data.message,
         });
       }
+    }
+  };
+}
+
+export function getRegister(email, password, repeatPassword) {
+  return async (dispatch) => {
+    try {
+      const { data } = await url.post(
+        "/signup",
+        {
+          email,
+          password,
+          repeatPassword,
+        },
+        config
+      );
+      dispatch({ type: GET_REGISTER, payload: data.message });
+    } catch (error) {
+      dispatch({ type: FAILED_REGISTER, payload: error.response.data.message });
     }
   };
 }

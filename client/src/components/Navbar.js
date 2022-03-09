@@ -26,6 +26,8 @@ import {
   SEARCH_TERM,
   CALENDER_COMPONENTS,
 } from "../redux/action-type";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function Navbar() {
   const [searchShow, setSearchShow] = useState(false);
@@ -75,6 +77,12 @@ function Navbar() {
   useEffect(() => {
     handleDarkMode(dark);
   }, [dark]);
+
+  const navigate = useNavigate();
+  function logOut() {
+    Cookies.remove("Token");
+    navigate("/login");
+  }
 
   return (
     <div className="font-roboto sticky top-0 w-min-full border-b dark:border-[#30363d] h-14 px-3 md:px-6 flex items-center justify-between bg-white text-black dark:bg-[#0d1117] dark:text-white z-50">
@@ -175,7 +183,10 @@ function Navbar() {
                   </Menu.Item>
 
                   <Menu.Item>
-                    <button className="group hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full px-2 py-2 ">
+                    <button
+                      onClick={logOut}
+                      className="group hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full px-2 py-2 "
+                    >
                       <RiLogoutBoxRLine fontSize={20} />
                       <p>Log out</p>
                     </button>

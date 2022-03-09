@@ -11,6 +11,7 @@ const {
   pinsTask,
   deleteTask,
   archiveTask,
+  getTaskByArchive,
 } = require("../controller/main");
 const authorization = require("../middleware/authorization");
 const validate = require("../validation/validation");
@@ -24,5 +25,8 @@ router.get("/taskbyid/:id", authorization, getTaskById);
 router.put("/pins/:id", authorization, pinsTask);
 router.delete("/task/:id", authorization, deleteTask);
 router.put("/archive/:id", authorization, archiveTask);
+
+// archive
+router.get("/archive", authorization, getTaskByArchive);
 
 module.exports = router;

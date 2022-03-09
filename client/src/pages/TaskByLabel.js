@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Add from "../components/Add";
 import Card from "../components/Card";
 import { useParams } from "react-router-dom";
 import { getTaskByLabels } from "../redux/action/task";
 import NoData from "../components/NoData";
+import Layout from "../components/Layout";
 
 function TaskByLabel() {
   const { slug } = useParams();
-  const { menu } = useSelector((state) => state.style);
   const { grid } = useSelector((state) => state.style);
   const {
     loading,
@@ -18,22 +17,17 @@ function TaskByLabel() {
   } = useSelector((state) => state.task);
 
   const dispatch = useDispatch();
-
-  console.log(taskByLabel);
-
   useEffect(() => {
     dispatch(getTaskByLabels(slug));
   }, [slug]);
 
-  console.log(taskByLabel?.data?.length);
-
   const colsView = "columns-2 md:columns-4 lg:colums-5 gap-2 space-y-2";
   const listView = "grid gap-2 grid-cols-1";
   return (
-    <div className="md:m-8 mt-8 px-3 w-full md:pl-64 transition duration-500 ">
-      {taskByLabel?.data?.length == 0 ? (
-        <NoData />
-      ) : (
+    <Layout>
+      <div className="md:m-8 mt-8 px-3 w-full md:pl-64 transition duration-500 ">
+        {messageInLabel && <NoData />}
+
         <div className={grid ? colsView : listView}>
           {taskByLabel?.data?.map((x, i) => (
             <Card
@@ -47,8 +41,8 @@ function TaskByLabel() {
             />
           ))}
         </div>
-      )}
-    </div>
+      </div>
+    </Layout>
   );
 }
 

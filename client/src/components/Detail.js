@@ -27,7 +27,7 @@ const Detail = () => {
 
   return (
     <div
-      className={`fixed overflow-x-scroll scrollbar-hide z-10 top-0 right-0 h-full  md:w-1/2 w-full  border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ease-in-out ${
+      className={`fixed overflow-x-scroll scrollbar-hide  top-0 right-0 h-full  md:w-1/2 w-full  border-l dark:border-[#30363d] bg-white text-black dark:bg-[#0d1117] dark:text-white p-5 duration-700 ease-in-out ${
         slideDetail ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -45,7 +45,7 @@ const Detail = () => {
           <p className="font-medium text-2xl">{dataTask?.data?.title}</p>
         )}
 
-        <div className="flex space-x-4 items-center">
+        <div className="flex space-x-2 items-center overflow-x-scroll scrollbar-hide">
           {dataTask?.data?.time && (
             <div className="flex items-center space-x-2 bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
               <BiTimeFive fontSize={23} />
@@ -54,7 +54,7 @@ const Detail = () => {
           )}
 
           {dataTask?.data?.startDate && (
-            <div className="flex items-center space-x-2 bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
+            <div className="flex items-center space-x-2 whitespace-nowrap bg-gray-100 dark:bg-[#20262d] rounded-xl px-3 py-1">
               <BiCalendar fontSize={23} />
 
               <p className="font-base text-xl">

@@ -16,7 +16,6 @@ const intialState = {
   },
 
   add: {
-    message: [],
     error: [],
   },
 };

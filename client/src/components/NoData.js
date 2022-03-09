@@ -1,14 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 
-import ImageNoData from "../assets/images/nodata.png";
-
+import { BiLabel } from "react-icons/bi";
 const NoData = () => {
-  const { slug } = useParams();
   return (
-    <div className="flex flex-col">
-      <img src={ImageNoData} className="w-1/4  mx-auto " />
-      <h1 className="text-center text-4xl">Data is Empty in Label {slug}</h1>
+    <div className="flex flex-col mt-28">
+      <BiLabel className="mx-auto text-gray-400 text-9xl" />
+      <p className="text-2xl md:text-4xl mx-auto text-gray-400">
+        No data in label
+      </p>
     </div>
   );
 };

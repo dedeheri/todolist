@@ -53,21 +53,21 @@ function Card({
   return (
     <div className="cursor-pointer group break-inside-avoid-column">
       <div className="border dark:border-[#30363d] p-4 rounded-lg hover:border-gray-400 hover:dark:border-[#535555]  trasition duration-500">
-        <div onClick={() => detail(id)} className="space-y-4 mt-2">
+        <div onClick={() => detail(id)} className="space-y-3 mt-2">
           {time && (
             <div className="flex justify-start">
               <div className="flex space-x-2  dark:bg-[#20262d] bg-gray-100 py-1 px-3 rounded-xl   items-center dark:text-white text-black">
                 <BiTimeFive />
-                <p className="text-md font-medium"> {time}</p>
+                <p className="md:text-base font-medium text-sm"> {time}</p>
               </div>
             </div>
           )}
 
           {startDate && endDate && (
-            <div className="flex justify-start">
+            <div className="flex justify-start overflow-x-scroll scrollbar-hide">
               <div className="flex space-x-2 dark:bg-[#20262d] bg-gray-100 py-1 px-3  rounded-xl items-center dark:text-white text-black">
                 <BsCalendarDate fontSize={16} />
-                <p className="text-md font-medium">
+                <p className="md:text-base font-medium text-sm whitespace-nowrap ">
                   {moment(startDate).format("LL")} -{" "}
                   {moment(endDate).format("LL")}
                 </p>
@@ -82,10 +82,12 @@ function Card({
           </p>
 
           {label && (
-            <div className="flex justify-start  ">
-              <div className="flex space-x-2 dark:bg-[#20262d] py-1 px-3 rounded-xl bg-gray-100 ">
+            <div className="flex justify-start">
+              <div className="flex items-center space-x-2 dark:bg-[#20262d] py-1 px-3 rounded-xl bg-gray-100 ">
                 <p>{label?.icons}</p>
-                <p className="font-medium text-md">{label?.title}</p>
+                <p className="md:text-base font-medium text-sm">
+                  {label?.title}
+                </p>
               </div>
             </div>
           )}

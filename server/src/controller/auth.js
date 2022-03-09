@@ -4,19 +4,19 @@ const jwt = require("jsonwebtoken");
 const auth = require("../model/auth");
 
 const signUp = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, repeatPassword } = req.body;
 
   const authModel = await auth.findOne({ email });
 
   // error validation
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return next("error");
+    return res.status(422).json({ message: errors.array() });
   }
 
   // error email already exist
   if (authModel) {
-    return res.status(403).json({ message: "Email Already Exist" });
+    return res.status(409).json({ message: "Email Already Exist" });
   }
 
   // password hash
@@ -28,7 +28,9 @@ const signUp = async (req, res, next) => {
     });
 
     const resultAuth = await newAuth.save();
-    return res.status(200).json({ message: "success", data: resultAuth });
+
+    const { password, ...data } = resultAuth._doc;
+    return res.status(200).json({ message: "success", data });
   } catch (error) {
     next(error);
   }
@@ -77,13 +79,11 @@ const signIn = async (req, res, next) => {
 const users = async (req, res, next) => {
   const id = req.user._id;
 
-  const authModel = await auth.findOne({ _id: id }, "email");
-  if (!authModel) {
-    return res.status(404).json({ message: "No Data" });
-  }
+  const authModel = await auth.findOne({ _id: id });
+  const { password, ...info } = authModel._doc;
 
   try {
-    return res.status(200).json({ message: "success", data: authModel });
+    return res.status(200).json({ message: "success", data: { info } });
   } catch (error) {
     next(error);
   }

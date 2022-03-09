@@ -3,6 +3,8 @@ const {
   FAILED_GET_LOGGIN,
   GET_DATA_USERS,
   FAILED_GET_DATA_USERS,
+  GET_REGISTER,
+  FAILED_REGISTER,
 } = require("../action-type");
 
 const initalState = {
@@ -13,6 +15,13 @@ const initalState = {
   failed: {
     error: [],
     validation: [],
+  },
+
+  register: {
+    success: [],
+    validation: [],
+    error: [],
+    formError: false,
   },
 
   users: {
@@ -39,6 +48,27 @@ function authorization(state = initalState, action) {
         failed: {
           error: action.error,
           validation: action.validation,
+        },
+      };
+    }
+
+    case GET_REGISTER: {
+      return {
+        ...state,
+        loading: true,
+        register: {
+          success: action.payload,
+        },
+      };
+    }
+
+    case FAILED_REGISTER: {
+      return {
+        ...state,
+        loading: true,
+        register: {
+          formError: true,
+          error: action.payload,
         },
       };
     }

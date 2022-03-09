@@ -118,6 +118,10 @@ const getTaskByLabel = async (req, res, next) => {
 
   const resultFindBySlug = findBySlug(taskModel);
 
+  if (resultFindBySlug.length == 0) {
+    return res.status(404).json({ message: "Data Empty" });
+  }
+
   try {
     return res.status(200).json({
       message: "success",
@@ -143,7 +147,7 @@ const getTaskById = async (req, res, next) => {
       data: taskModel,
     });
   } catch (error) {
-    res.status(404).json({ message: "Id not found" });
+    res.status(404).json({ message: { error: "Something Broke" } });
   }
 };
 
@@ -189,6 +193,25 @@ const archiveTask = async (req, res, next) => {
   }
 };
 
+const getTaskByArchive = async (req, res, next) => {
+  const usersId = req.user._id;
+
+  const resultData = await task
+    .find({ userId: usersId, archive: true })
+    .sort({ createdAt: -1 })
+    .populate("label");
+  if (resultData.length === 0) {
+    return res.status(404).json({ message: "No Data in Archive" });
+  }
+  try {
+    return res
+      .status(200)
+      .json({ message: "success", total: resultData.length, data: resultData });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   addLabel,
   getLabels,
@@ -199,4 +222,5 @@ module.exports = {
   pinsTask,
   deleteTask,
   archiveTask,
+  getTaskByArchive,
 };

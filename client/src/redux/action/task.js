@@ -10,7 +10,10 @@ import {
   FAILED_GET_TASK,
   GET_DETAIL_TASK,
   GET_TASK,
+  GET_TASK_BY_ARCHIVE,
   GET_TASK_BY_LABEL,
+  MESSAGE_GET_TASK_BY_ARCHIVE,
+  NO_DATA_IN_TASK_BY_LABEL,
   PINS_TASK,
 } from "../action-type";
 
@@ -75,7 +78,12 @@ export function getTaskByLabels(params) {
       const { data } = await url.get(`taskbylabel/${params}`, config);
       dispatch({ type: GET_TASK_BY_LABEL, payload: data });
     } catch (error) {
-      console.log(error);
+      dispatch({
+        type: NO_DATA_IN_TASK_BY_LABEL,
+        payload: error.response.data.message,
+      });
+
+      console.clear();
     }
   };
 }
@@ -124,6 +132,22 @@ export function deleteTask(id) {
       dispatch({ type: DELETE_TASK, payload: data.message });
     } catch (error) {
       dispatch({ type: FAILED_DELETE_TASK, payload: error.response.data });
+    }
+  };
+}
+
+export function getTaskByArchive() {
+  return async (dispatch) => {
+    try {
+      const { data } = await url.get("archive", config);
+      dispatch({ type: GET_TASK_BY_ARCHIVE, payload: data });
+    } catch (error) {
+      dispatch({
+        type: MESSAGE_GET_TASK_BY_ARCHIVE,
+        payload: error.response.data.message,
+      });
+
+      console.clear();
     }
   };
 }

@@ -9,7 +9,9 @@ import {
   FAILED_PINS_TASK,
   GET_DETAIL_TASK,
   GET_TASK,
+  GET_TASK_BY_ARCHIVE,
   GET_TASK_BY_LABEL,
+  MESSAGE_GET_TASK_BY_ARCHIVE,
   NO_DATA_IN_TASK_BY_LABEL,
   PINS_TASK,
   REMOVE_DATA_IN_ADD_TASK,
@@ -35,6 +37,7 @@ const intialState = {
   byLabel: {
     task: [],
     message: [],
+    message_no_data: "",
   },
 
   detail: {
@@ -57,10 +60,34 @@ const intialState = {
     message_archive: "",
     error_archive: "",
   },
+
+  getByArchive: {
+    loading: true,
+    archive: [],
+    message: [],
+  },
 };
 
 function task(state = intialState, action) {
   switch (action.type) {
+    case GET_TASK_BY_ARCHIVE: {
+      return {
+        ...state,
+        getByArchive: {
+          archive: action.payload,
+          loading: false,
+        },
+      };
+    }
+    case MESSAGE_GET_TASK_BY_ARCHIVE: {
+      return {
+        ...state,
+        getByArchive: {
+          loading: false,
+          message: action.payload,
+        },
+      };
+    }
     case GET_TASK: {
       return {
         ...state,

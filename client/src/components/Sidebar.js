@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
+
+import { Menu, Transition } from "@headlessui/react";
 
 // icons
 import { BsPlusLg, BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
-import { MdOutlineFeed, MdOutlineArchive } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdOutlineEdit,
+  MdOutlineFeed,
+  MdOutlineArchive,
+} from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getLabels } from "../redux/action/labels";
@@ -55,7 +62,7 @@ function Sidebar() {
     "flex space-x-3 mb-4 items-center p-1 w-full  hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer transition duration-300 rounded-md";
   return (
     <>
-      <div className="border-r w-64 fixed  dark:border-[#30363d]  h-full p-8 md:block hidden  space-y-1">
+      <div className="border-r w-60 fixed  dark:border-[#30363d]  h-full p-8 md:block hidden  space-y-1">
         <button
           type="button"
           onClick={openAddTask}
@@ -110,17 +117,45 @@ function Sidebar() {
                   <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
                 </div>
 
-                <div className="px-2 flex items-center">
-                  <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
-                    <BsThreeDotsVertical />
-                  </button>
-                </div>
+                <Menu as="div" className="relative inline-block  text-left">
+                  <div>
+                    <Menu.Button className="group-hover:opacity-100 opacity-0 transiton duration-300">
+                      <BsThreeDotsVertical />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute w-32 z-50 right-0 mt-3 origin-top-right bg-white dark:bg-[#0d1117] border dark:border-[#30363d] divide-y rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="p-1 ">
+                        <Menu.Item>
+                          <button className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-2 items-center w-full px-2 py-1 ">
+                            <MdOutlineEdit fontSize={20} />
+                            <p>Edit</p>
+                          </button>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <button className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-2 items-center w-full px-2 py-1 ">
+                            <MdDeleteOutline fontSize={20} />
+                            <p>Delete</p>
+                          </button>
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </NavLink>
             ))}
           </div>
         )}
         <div className="text-sm text-gray-400 dark:text-gray-400">
-          Create By
+          Create By{" "}
           <a
             href="https://github.com/dedeheri/todolist"
             target="_blank"
@@ -134,7 +169,7 @@ function Sidebar() {
       {/* mobile menu */}
 
       <div
-        className={`border-r fixed bg-white dark:bg-[#0d1117] dark:text-white  dark:border-[#30363d]  h-screen p-8 transition duration-500  space-y-1 ${
+        className={`border-r z-10 fixed w-60 bg-white dark:bg-[#0d1117] dark:text-white  dark:border-[#30363d]  h-screen p-8 transition duration-500  space-y-1 ${
           menu ? "-translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -191,15 +226,54 @@ function Sidebar() {
                   <p className="text-lg whitespace-nowrap">{transcut(title)}</p>
                 </div>
 
-                <div className="px-2 flex items-center">
-                  <button className="group-hover:opacity-100 opacity-0 transiton duration-300">
-                    <BsThreeDotsVertical />
-                  </button>
-                </div>
+                <Menu as="div" className="relative inline-block  text-left">
+                  <div>
+                    <Menu.Button className="group-hover:opacity-100 opacity-0 transiton duration-300">
+                      <BsThreeDotsVertical />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute w-32 z-50 right-0 mt-3 origin-top-right bg-white dark:bg-[#0d1117] border dark:border-[#30363d] divide-y rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="p-1 ">
+                        <Menu.Item>
+                          <button className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-2 items-center w-full px-2 py-1 ">
+                            <MdOutlineEdit fontSize={20} />
+                            <p>Edit</p>
+                          </button>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <button className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-2 items-center w-full px-2 py-1 ">
+                            <MdDeleteOutline fontSize={20} />
+                            <p>Delete</p>
+                          </button>
+                        </Menu.Item>
+                      </div>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </NavLink>
             ))}
           </div>
         )}
+
+        <div className="text-sm text-gray-400 dark:text-gray-400">
+          Create By{" "}
+          <a
+            href="https://github.com/dedeheri/todolist"
+            target="_blank"
+            className="cursor-pointer underline"
+          >
+            Dede Heri
+          </a>
+        </div>
       </div>
     </>
   );
