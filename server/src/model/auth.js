@@ -1,18 +1,19 @@
 const mongoose = require("mongoose");
-
-const validation = {
-  type: String,
-  required: true,
-  trim: true,
-};
-
 const auth = mongoose.Schema(
   {
     email: {
-      ...validation,
+      type: String,
+      required: true,
+      trim: true,
     },
     password: {
-      ...validation,
+      type: String,
+      required: true,
+      trim: true,
+    },
+    refreshToken: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true }

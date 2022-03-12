@@ -22,6 +22,32 @@ const validate = (props) => {
       ];
     }
 
+    case "forgot": {
+      return [
+        body("email")
+          .notEmpty()
+          .withMessage("Email can not be empty")
+          .isEmail()
+          .withMessage("Format Email Invalid"),
+      ];
+    }
+
+    case "reset": {
+      return [
+        body("password", "Invalid Password")
+          .notEmpty()
+          .isLength({ min: 6 })
+          .withMessage("Password Must be then 6 character"),
+        body("repeatPassword").custom((value, { req }) => {
+          if (value !== req.body.password) {
+            throw new Error("Password not the same");
+          }
+
+          return true;
+        }),
+      ];
+    }
+
     case "login": {
       return [
         body("email", "Invalid Email")
@@ -45,6 +71,7 @@ const validate = (props) => {
     case "addtask": {
       return [body("content", "Can not be empty").notEmpty()];
     }
+
     default:
       return props;
   }

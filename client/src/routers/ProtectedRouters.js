@@ -1,32 +1,18 @@
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
-import { getDataUsers } from "../redux/action/authorization";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-function ProtectedRouters() {
-  const dispatch = useDispatch();
-
+function ProtectedRouters({ children }) {
   const {
-    success: { message },
+    login: { is_login },
   } = useSelector((state) => state.authorization);
 
-  console.log(message);
+  const location = useLocation();
 
-  useEffect(() => {
-    dispatch(getDataUsers());
-  }, []);
-  const [authenticated, setAuthenticated] = useState(true);
-
-  useEffect(() => {
-    if (Cookies.get("Token")) {
-      setAuthenticated(true);
-    } else {
-      setAuthenticated(false);
-    }
-  }, [message]);
-
-  return authenticated ? <Outlet /> : <Navigate to="/login" />;
+  return is_login ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" replace state={{ from: location }} />
+  );
 }
 
 export default ProtectedRouters;

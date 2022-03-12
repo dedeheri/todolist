@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React from "react";
 import { useSelector } from "react-redux";
 import Add from "./Add";
@@ -10,8 +11,10 @@ import Sidebar from "./Sidebar";
 function Layout({ children }) {
   const { darkMode } = useSelector((state) => state.style);
 
+  const theme = Cookies.get("theme");
+
   return (
-    <div className={`h-screen ${darkMode ? "dark bg-[#0d1117]" : "light"}`}>
+    <div className={`h-screen ${true ? "dark bg-[#0d1117]" : "light"}`}>
       <Navbar />
       <div className="flex font-roboto bg-white text-black dark:bg-[#0d1117] dark:text-white">
         <Sidebar />

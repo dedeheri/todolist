@@ -4,10 +4,11 @@ import { Listbox, Transition } from "@headlessui/react";
 // moment
 import moment from "moment";
 
+import "animate.css";
+
 // icons
 import { HiOutlineArchive, HiSelector } from "react-icons/hi";
 import { BiCalendar, BiLabel, BiTimeFive } from "react-icons/bi";
-
 import { MdClose, MdTitle } from "react-icons/md";
 import { RiPushpinLine } from "react-icons/ri";
 
@@ -120,7 +121,7 @@ function Add() {
 
         <div className="w-full mt-8">
           {showTitle && (
-            <div className="flex items-center space-x-3 animate-slide-down">
+            <div className="flex items-center space-x-3  animate__animated animate__fadeIn">
               <p className="font-medium">Title : </p>
               <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2">
                 <input
@@ -133,7 +134,7 @@ function Add() {
           )}
 
           {calendar && (
-            <div className="flex items-center space-x-3 animate-slide-down mt-2">
+            <div className="flex items-center space-x-3  animate__animated animate__fadeIn mt-2">
               <p className="font-medium">Date : </p>
               <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2 space-x-4">
                 <DatePicker
@@ -157,7 +158,7 @@ function Add() {
           )}
 
           {showTime && (
-            <div className="flex items-center space-x-3 animate-slide-down mt-2">
+            <div className="flex items-center space-x-3  animate__animated animate__fadeIn mt-2">
               <p className="font-medium">Time : </p>
               <div className="dark:bg-[#0d1117] rounded-lg border dark:border-[#30363d] bg-white flex items-center p-2">
                 <input
@@ -170,7 +171,7 @@ function Add() {
             </div>
           )}
           {label && (
-            <div className="flex items-center space-x-3 animate-slide-down mt-2">
+            <div className="flex items-center space-x-3  animate__animated animate__fadeIn mt-2">
               <p className="font-medium">Label : </p>
               <Listbox value={selectLabel} onChange={setSelectLabel}>
                 <div className="relative rounded-lg border dark:border-[#30363d]">

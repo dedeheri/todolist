@@ -1,10 +1,4 @@
-import {
-  ADD_LABEL,
-  FAILED_ADD_LABEL,
-  FAILED_GET_LABEL,
-  GET_LABEL,
-  REMOVE_MESSAGE_ADD_LABEL,
-} from "../action-type";
+import * as actionTypes from "../action-type";
 
 const intialState = {
   loading: true,
@@ -22,7 +16,7 @@ const intialState = {
 
 function labels(state = intialState, action) {
   switch (action.type) {
-    case GET_LABEL: {
+    case actionTypes.GET_LABEL: {
       return {
         ...state,
         loading: false,
@@ -31,7 +25,7 @@ function labels(state = intialState, action) {
         },
       };
     }
-    case FAILED_GET_LABEL: {
+    case actionTypes.FAILED_GET_LABEL: {
       return {
         ...state,
         loading: false,
@@ -41,7 +35,7 @@ function labels(state = intialState, action) {
       };
     }
 
-    case ADD_LABEL: {
+    case actionTypes.ADD_LABEL: {
       return {
         ...state,
         loading: false,
@@ -51,7 +45,7 @@ function labels(state = intialState, action) {
       };
     }
 
-    case FAILED_ADD_LABEL: {
+    case actionTypes.FAILED_ADD_LABEL: {
       return {
         ...state,
         loading: false,
@@ -61,7 +55,7 @@ function labels(state = intialState, action) {
       };
     }
 
-    case REMOVE_MESSAGE_ADD_LABEL: {
+    case actionTypes.REMOVE_MESSAGE_ADD_LABEL: {
       return {
         ...state,
         loading: true,

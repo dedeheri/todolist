@@ -7,6 +7,7 @@ import { getTask } from "../redux/action/task";
 import CardLoading from "../components/CardLoading";
 import Layout from "../components/Layout";
 
+/* eslint eqeqeq: 0 */
 function Main() {
   const colsView = "columns-2 md:columns-3 lg:columns-4 gap-2 space-y-2";
   const listView = "grid gap-2 grid-cols-1";

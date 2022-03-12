@@ -31,14 +31,10 @@ import Cookies from "js-cookie";
 
 function Navbar() {
   const [searchShow, setSearchShow] = useState(false);
-  const [dark, setDark] = useState(true);
 
-  const { menu, grid } = useSelector((state) => state.style);
+  const { menu, grid, darkMode } = useSelector((state) => state.style);
   const {
-    loading,
-    users: {
-      data: { data },
-    },
+    users: { data },
   } = useSelector((state) => state.authorization);
 
   const dispatch = useDispatch();
@@ -68,15 +64,14 @@ function Navbar() {
       : dispatch({ type: REMOVE_VALUE_SEARCH_TERM });
   }
 
-  function handleDarkMode(dark) {
-    dark
-      ? dispatch({ type: DARKMODE_ON_COMPONENTS })
-      : dispatch({ type: DARKMODE_OFF_COMPONENTS });
+  function handleDarkModeOne() {
+    Cookies.set("theme", "dark");
+    dispatch({ type: DARKMODE_ON_COMPONENTS });
   }
-
-  useEffect(() => {
-    handleDarkMode(dark);
-  }, [dark]);
+  function handleDarkModeOff() {
+    Cookies.set("theme", "light");
+    dispatch({ type: DARKMODE_OFF_COMPONENTS });
+  }
 
   const navigate = useNavigate();
   function logOut() {
@@ -153,7 +148,7 @@ function Navbar() {
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="inline-flex px-2  hover:bg-gray-100 hover:dark:bg-[#31363D] items-center justify-center w-full text-sm font-medium text-black dark:text-white rounded-lg duration-500">
-                {data?.email}
+                {data?.data?.email}
                 <MdKeyboardArrowDown fontSize={26} />
               </Menu.Button>
             </div>
@@ -169,17 +164,24 @@ function Navbar() {
               <Menu.Items className="absolute z-50 right-0 w-56 mt-2 origin-top-right bg-white dark:bg-[#0d1117] border dark:border-[#30363d] divide-y rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="p-1 ">
                   <Menu.Item>
-                    <button
-                      onClick={() => setDark(!dark)}
-                      className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full p-2 "
-                    >
-                      {dark ? (
-                        <BsFillSunFill fontSize={18} />
-                      ) : (
+                    {!darkMode ? (
+                      <button
+                        onClick={handleDarkModeOne}
+                        className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full p-2 "
+                      >
                         <BsMoonStars fontSize={18} />
-                      )}
-                      <p>Appearance</p>
-                    </button>
+                        <p>Appearance</p>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleDarkModeOff}
+                        className="group  hover:bg-gray-100 hover:dark:bg-[#31363D] flex rounded-md space-x-4 items-center w-full p-2 "
+                      >
+                        <BsFillSunFill fontSize={18} />
+
+                        <p>Appearance</p>
+                      </button>
+                    )}
                   </Menu.Item>
 
                   <Menu.Item>

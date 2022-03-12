@@ -1,17 +1,4 @@
-import {
-  DARKMODE_ON_COMPONENTS,
-  DARKMODE_OFF_COMPONENTS,
-  GRID_COMPONENTS,
-  MENU_COMPONENTS,
-  REMOVE_VALUE_SEARCH_TERM,
-  SEARCH_TERM,
-  SLIDETASK_COMPONENTS,
-  CALENDER_COMPONENTS,
-  SLIDE_DETAIL,
-  SLIDE_OOF_DETAIL,
-  MODAL_DELETE_ON,
-  MODAL_DELETE_OFF,
-} from "../action-type";
+import * as actionTypes from "../action-type";
 
 const initalState = {
   menu: false,
@@ -33,13 +20,13 @@ const initalState = {
 
 function style(state = initalState, action) {
   switch (action.type) {
-    case MENU_COMPONENTS: {
+    case actionTypes.MENU_COMPONENTS: {
       return {
         ...state,
         menu: action.menu,
       };
     }
-    case MODAL_DELETE_ON: {
+    case actionTypes.MODAL_DELETE_ON: {
       return {
         ...state,
         modal: {
@@ -49,56 +36,56 @@ function style(state = initalState, action) {
         },
       };
     }
-    case MODAL_DELETE_OFF: {
+    case actionTypes.MODAL_DELETE_OFF: {
       return {
         ...state,
         modal: { modalDelete: action.modal, idTask: "" },
       };
     }
-    case GRID_COMPONENTS: {
+    case actionTypes.GRID_COMPONENTS: {
       return {
         ...state,
         grid: action.grid,
       };
     }
-    case DARKMODE_ON_COMPONENTS: {
+    case actionTypes.DARKMODE_ON_COMPONENTS: {
       return {
         ...state,
         darkMode: true,
       };
     }
-    case DARKMODE_OFF_COMPONENTS: {
+    case actionTypes.DARKMODE_OFF_COMPONENTS: {
       return {
         ...state,
         darkMode: false,
       };
     }
-    case SLIDETASK_COMPONENTS: {
+    case actionTypes.SLIDETASK_COMPONENTS: {
       return {
         ...state,
         slideTask: action.slideTask,
       };
     }
-    case SEARCH_TERM: {
+    case actionTypes.SEARCH_TERM: {
       return {
         ...state,
         search: action.search,
       };
     }
-    case REMOVE_VALUE_SEARCH_TERM: {
+    case actionTypes.REMOVE_VALUE_SEARCH_TERM: {
       return {
         ...state,
         search: "",
       };
     }
-    case CALENDER_COMPONENTS: {
+    case actionTypes.CALENDER_COMPONENTS: {
       return {
         ...state,
         calender: action.calender,
       };
     }
 
-    case SLIDE_DETAIL: {
+    case actionTypes.SLIDE_DETAIL: {
       return {
         ...state,
         detail: {
@@ -107,7 +94,7 @@ function style(state = initalState, action) {
         },
       };
     }
-    case SLIDE_OOF_DETAIL: {
+    case actionTypes.SLIDE_OOF_DETAIL: {
       return {
         ...state,
         detail: {

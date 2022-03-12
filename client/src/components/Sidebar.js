@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 
 import { Menu, Transition } from "@headlessui/react";
 
@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLabels } from "../redux/action/labels";
 import InputLabel from "./InputLabel";
 import {
+  MENU_COMPONENTS,
   REMOVE_MESSAGE_ADD_LABEL,
   SLIDETASK_COMPONENTS,
 } from "../redux/action-type";
@@ -50,6 +51,33 @@ function Sidebar() {
     return text.length > 9 ? text.substring(0, 9) + "..." : text;
   }
 
+  const handleCloseClick = useRef();
+
+  useEffect(() => {
+    function handleCloseAnyClick(e) {
+      if (
+        handleCloseClick.current &&
+        !handleCloseClick.current.contains(e.target)
+      ) {
+        dispatch({ type: MENU_COMPONENTS, menu: false });
+      }
+    }
+
+    document.addEventListener("mousedown", handleCloseAnyClick);
+
+    return () => document.removeEventListener("mousedown", handleCloseAnyClick);
+  }, [handleCloseClick]);
+
+  useEffect(() => {
+    function hideMenuAuto() {
+      if (window.innerWidth > 768 && menu == true) {
+        dispatch({ type: MENU_COMPONENTS, menu: false });
+      }
+    }
+    window.addEventListener("resize", hideMenuAuto);
+    return () => window.removeEventListener("resize", hideMenuAuto);
+  });
+
   const activeLinkLabel =
     "group flex  justify-between items-center  hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer bg-gray-100 dark:bg-[#20262d] cursor-pointer transition p-1 duration-300 w-full rounded-md";
 
@@ -60,6 +88,7 @@ function Sidebar() {
     "flex space-x-3 mb-4 items-center p-1 w-full  hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer bg-gray-100 dark:bg-[#20262d]  transition duration-300 rounded-md";
   const noActiveLink =
     "flex space-x-3 mb-4 items-center p-1 w-full  hover:bg-gray-100 hover:dark:bg-[#31363D] cursor-pointer transition duration-300 rounded-md";
+
   return (
     <>
       <div className="border-r w-60 fixed  dark:border-[#30363d]  h-full p-8 md:block hidden  space-y-1">
@@ -169,6 +198,7 @@ function Sidebar() {
       {/* mobile menu */}
 
       <div
+        ref={handleCloseClick}
         className={`border-r z-10 fixed w-60 bg-white dark:bg-[#0d1117] dark:text-white  dark:border-[#30363d]  h-screen p-8 transition duration-500  space-y-1 ${
           menu ? "-translate-x-0" : "-translate-x-full"
         }`}

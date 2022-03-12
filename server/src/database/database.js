@@ -1,15 +1,17 @@
-const mongoose = require("mongoose");
+const { connect } = require("mongoose");
 
-const setDatabaseConfig = () => {
-  mongoose
-    .connect(process.env.DATABASE_URL, {
+const connection = async () => {
+  try {
+    const config = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    })
-    .then(() => {
-      console.log(`database connecting`);
-    })
-    .catch((e) => console.log(e));
+    };
+
+    await connect(process.env.DATABASE_URL, config);
+    console.log("database connected");
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = setDatabaseConfig;
+module.exports = connection;

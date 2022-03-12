@@ -6,6 +6,8 @@ import { Picker } from "emoji-mart";
 import { useDispatch } from "react-redux";
 import { addLabel } from "../redux/action/labels";
 
+import "animate.css";
+
 function InputLabel() {
   const [showEmoji, setShowEmoji] = useState(false);
 
@@ -26,7 +28,7 @@ function InputLabel() {
     <>
       <form
         onSubmit={handleAddLabel}
-        className="p-1 rounded-lg animate-slide-down duration-500 "
+        className="p-1 rounded-lg animate__animated animate__fadeIn"
       >
         <div className="flex space-x-1">
           <div

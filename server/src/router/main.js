@@ -13,20 +13,20 @@ const {
   archiveTask,
   getTaskByArchive,
 } = require("../controller/main");
-const authorization = require("../middleware/authorization");
+const verifyToken = require("../middleware/verifyToken");
 const validate = require("../validation/validation");
 
-router.post("/addlabel", authorization, validate("label"), addLabel);
-router.get("/labels", authorization, getLabels);
-router.post("/addtask", authorization, validate("addtask"), addTask);
-router.get("/task", authorization, getTask);
-router.get("/taskbylabel/:slug", authorization, getTaskByLabel);
-router.get("/taskbyid/:id", authorization, getTaskById);
-router.put("/pins/:id", authorization, pinsTask);
-router.delete("/task/:id", authorization, deleteTask);
-router.put("/archive/:id", authorization, archiveTask);
+router.post("/addlabel", verifyToken, validate("label"), addLabel);
+router.get("/labels", verifyToken, getLabels);
+router.post("/addtask", verifyToken, validate("addtask"), addTask);
+router.get("/task", verifyToken, getTask);
+router.get("/taskbylabel/:slug", verifyToken, getTaskByLabel);
+router.get("/taskbyid/:id", verifyToken, getTaskById);
+router.put("/pins/:id", verifyToken, pinsTask);
+router.delete("/task/:id", verifyToken, deleteTask);
+router.put("/archive/:id", verifyToken, archiveTask);
 
 // archive
-router.get("/archive", authorization, getTaskByArchive);
+router.get("/archive", verifyToken, getTaskByArchive);
 
 module.exports = router;

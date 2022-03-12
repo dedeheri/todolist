@@ -1,24 +1,4 @@
-import {
-  ADD_TASK,
-  ARCHIVE_TASK,
-  DELETE_TASK,
-  FAILED_ADD_TASK,
-  FAILED_ARCHIVE_TASK,
-  FAILED_DELETE_TASK,
-  FAILED_GET_TASK,
-  FAILED_PINS_TASK,
-  GET_DETAIL_TASK,
-  GET_TASK,
-  GET_TASK_BY_ARCHIVE,
-  GET_TASK_BY_LABEL,
-  MESSAGE_GET_TASK_BY_ARCHIVE,
-  NO_DATA_IN_TASK_BY_LABEL,
-  PINS_TASK,
-  REMOVE_DATA_IN_ADD_TASK,
-  REMOVE_DELETE_TASK,
-  REMOVE_MESSAGE_ARCHIVE_TASK,
-  REMOVE_MESSAGE_PINS_TASK,
-} from "../action-type";
+import * as actionTypes from "../action-type";
 
 const intialState = {
   success: {
@@ -70,7 +50,7 @@ const intialState = {
 
 function task(state = intialState, action) {
   switch (action.type) {
-    case GET_TASK_BY_ARCHIVE: {
+    case actionTypes.GET_TASK_BY_ARCHIVE: {
       return {
         ...state,
         getByArchive: {
@@ -79,7 +59,7 @@ function task(state = intialState, action) {
         },
       };
     }
-    case MESSAGE_GET_TASK_BY_ARCHIVE: {
+    case actionTypes.MESSAGE_GET_TASK_BY_ARCHIVE: {
       return {
         ...state,
         getByArchive: {
@@ -88,7 +68,7 @@ function task(state = intialState, action) {
         },
       };
     }
-    case GET_TASK: {
+    case actionTypes.GET_TASK: {
       return {
         ...state,
         loading: false,
@@ -97,7 +77,7 @@ function task(state = intialState, action) {
         },
       };
     }
-    case FAILED_GET_TASK: {
+    case actionTypes.FAILED_GET_TASK: {
       return {
         ...state,
         loading: false,
@@ -106,7 +86,7 @@ function task(state = intialState, action) {
         },
       };
     }
-    case ADD_TASK: {
+    case actionTypes.ADD_TASK: {
       return {
         ...state,
         loading: false,
@@ -116,7 +96,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case FAILED_ADD_TASK: {
+    case actionTypes.FAILED_ADD_TASK: {
       return {
         ...state,
         loading: false,
@@ -126,7 +106,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case REMOVE_DATA_IN_ADD_TASK: {
+    case actionTypes.REMOVE_DATA_IN_ADD_TASK: {
       return {
         ...state,
         loading: true,
@@ -134,7 +114,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case GET_TASK_BY_LABEL: {
+    case actionTypes.GET_TASK_BY_LABEL: {
       return {
         ...state,
         loading: false,
@@ -144,7 +124,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case NO_DATA_IN_TASK_BY_LABEL: {
+    case actionTypes.NO_DATA_IN_TASK_BY_LABEL: {
       return {
         ...state,
         loading: false,
@@ -154,7 +134,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case GET_DETAIL_TASK: {
+    case actionTypes.GET_DETAIL_TASK: {
       return {
         ...state,
         loading: false,
@@ -164,7 +144,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case PINS_TASK: {
+    case actionTypes.PINS_TASK: {
       return {
         ...state,
         loading: false,
@@ -174,7 +154,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case REMOVE_MESSAGE_PINS_TASK: {
+    case actionTypes.REMOVE_MESSAGE_PINS_TASK: {
       return {
         ...state,
         loading: false,
@@ -182,7 +162,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case FAILED_PINS_TASK: {
+    case actionTypes.FAILED_PINS_TASK: {
       return {
         ...state,
         loading: false,
@@ -192,7 +172,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case ARCHIVE_TASK: {
+    case actionTypes.ARCHIVE_TASK: {
       return {
         ...state,
         loading: false,
@@ -202,7 +182,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case REMOVE_MESSAGE_ARCHIVE_TASK: {
+    case actionTypes.REMOVE_MESSAGE_ARCHIVE_TASK: {
       return {
         ...state,
         loading: false,
@@ -210,7 +190,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case FAILED_ARCHIVE_TASK: {
+    case actionTypes.FAILED_ARCHIVE_TASK: {
       return {
         ...state,
         loading: false,
@@ -220,7 +200,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case DELETE_TASK: {
+    case actionTypes.DELETE_TASK: {
       return {
         ...state,
         loading: false,
@@ -230,7 +210,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case REMOVE_DELETE_TASK: {
+    case actionTypes.REMOVE_DELETE_TASK: {
       return {
         ...state,
         loading: false,
@@ -238,7 +218,7 @@ function task(state = intialState, action) {
       };
     }
 
-    case FAILED_DELETE_TASK: {
+    case actionTypes.FAILED_DELETE_TASK: {
       return {
         ...state,
         loading: false,
